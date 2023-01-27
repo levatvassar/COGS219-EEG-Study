@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Card Betting Task</title>
+    <script src="https://unpkg.com/jspsych@7.3.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.2"></script>
+</head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych();
+
+    var timeline = [];
+
+    function drawRect(c) {
+      var ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.fillStyle = "red";
+      ctx.fillRect(150, 150, 200, 350);
+    }
+
+    var trial = {
+    type: jsPsychCanvasKeyboardResponse,
+    stimulus: drawRect,
+    }
+
+    timeline.push(trial);
+
+    jsPsych.run(timeline); // run it all at!
+  </script>
+</html>
