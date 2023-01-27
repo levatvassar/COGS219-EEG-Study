@@ -10,22 +10,26 @@
   </head>
   <body></body>
   <script>
-    var jsPsych = initJsPsych({
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
+    
+    // initialize jsPsych
+    var jsPsych = initJsPsych();
+    
+    // create timeline
     var timeline = [];
+    
+    // preload images (if we have those)
     var preload = {
       type: jsPsychPreload,
       images: ['img/blue.png', 'img/orange.png'] // replace with card images
     };
 
+    // welcome slide 
     var welcome = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: "Welcome to the experiment. Press any key to begin."
     };
 
+    // instruction slides 
     var instructions = {
       type: jsPsychHtmlKeyboardResponse,
       // replace stimulus with our instructions
@@ -45,7 +49,7 @@
         ,
         post_trial_gap: 2000
       };
-
+    
     // making a fixation cross
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
@@ -59,12 +63,21 @@
       }
     };
 
-    // defining variables for stimulus, images paired w/ correct responses
+    // defining variables for stimulus; making red, black cards
     var test_stimuli = [
       { stimulus: "img/blue.png", correct_response: 'f'},
       { stimulus: "img/orange.png", correct_response: 'j'}
     ];
 
+    // what happens in a trial 
+    var trial = {
+      
+    };
+    
+    var trial_procedure = {
+    
+    };
+    
     // what happens in one test
     var test = {
       type: jsPsychImageKeyboardResponse,
@@ -105,6 +118,7 @@
     timeline.push(preload);
     timeline.push(welcome);
     timeline.push(instructions);
+    timeline.push(trial_procedure);
     timeline.push(test_procedure);
     timeline.push(debrief_block);
 
