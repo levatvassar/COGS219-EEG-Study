@@ -6,30 +6,35 @@
     <script src=jspsych/plugin-html-keyboard-response.js></script>
     <script src=jspsych/plugin-image-keyboard-response.js></script>
     <script src=jspsych/plugin-preload.js></script>
+    <script src="jspsych/plugin-canvas-keyboard-response.js"></script>
     <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
-    
-    // initialize jsPsych
-    var jsPsych = initJsPsych();
-    
-    // create timeline
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
     var timeline = [];
-    
-    // preload images (if we have those)
     var preload = {
       type: jsPsychPreload,
       images: ['img/blue.png', 'img/orange.png'] // replace with card images
     };
 
-    // welcome slide 
+    function drawRect(c) {
+      var ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.fillStyle = "red";
+      ctx.fillRect(100, 100, 100, 200);
+      // ctx.stroke();
+    }
+
     var welcome = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: "Welcome to the experiment. Press any key to begin."
     };
 
-    // instruction slides 
     var instructions = {
       type: jsPsychHtmlKeyboardResponse,
       // replace stimulus with our instructions
@@ -49,7 +54,7 @@
         ,
         post_trial_gap: 2000
       };
-    
+
     // making a fixation cross
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
@@ -63,29 +68,22 @@
       }
     };
 
-    // defining variables for stimulus; making red, black cards
+    // defining variables for stimulus, images paired w/ correct responses
     var test_stimuli = [
-      { stimulus: "img/blue.png", correct_response: 'f'},
-      { stimulus: "img/orange.png", correct_response: 'j'}
+      // { stimulus: "img/blue.png", correct_response: 'f'},
+      // { stimulus: "img/orange.png", correct_response: 'j'}
+      // {stimulus: drawRect, correct_response: 'f'}
     ];
 
-    // what happens in a trial 
-    var trial = {
-      
-    };
-    
-    var trial_procedure = {
-    
-    };
-    
     // what happens in one test
     var test = {
-      type: jsPsychImageKeyboardResponse,
-      stimulus: jsPsych.timelineVariable('stimulus'), // image to be shown, (see var test_stimuli)
+      type: jsPsychCanvasKeyboardResponse,
+      // stimulus: jsPsych.timelineVariable('stimulus'), // image to be shown, (see var test_stimuli)
+      stimulus: drawRect,
       choices: ['f', 'j'], // the options a participant can press
       data: {
         task: 'response', // tagged as a 'response' trial (for data aggregation)
-        correct_response: jsPsych.timelineVariable('correct_response') // giving correct response for stimulus (see var test_stimuli)
+        // correct_response: jsPsych.timelineVariable('correct_response') // giving correct response for stimulus (see var test_stimuli)
       },
       on_finish: function(data){
         data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
@@ -118,7 +116,6 @@
     timeline.push(preload);
     timeline.push(welcome);
     timeline.push(instructions);
-    timeline.push(trial_procedure);
     timeline.push(test_procedure);
     timeline.push(debrief_block);
 
