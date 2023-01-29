@@ -59,6 +59,7 @@
     // Reusable trial blocks ----------------------------------------------------------------------------------------------
     var choice =
     {
+
       type: jsPsychHtmlKeyboardResponse,
       stimulus:
       `
@@ -115,6 +116,13 @@
         task: 'fixation'
       }
     };
+
+    // defining variables for stimulus, images paired w/ correct responses
+    var test_stimuli = [
+      // { stimulus: "img/blue.png", correct_response: 'f'},
+      // { stimulus: "img/orange.png", correct_response: 'j'}
+      // {stimulus: drawRect, correct_response: 'f'}
+    ];
 
     // Welcome + practice ---------------------------------------------------------------------------------------------------
     /* welcome instructions */
