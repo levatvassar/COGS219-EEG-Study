@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <style type="text/css">
+    .card_deck
+    {
+        margin: 0;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 500px;
+        height: 500px;
+        background: black;
+        border-radius: 100%;
+    }
+
+    .card
+    {
+        position: absolute;
+        top: 50%;
+        width: 80px;
+        height: 100px;
+        background: grey;
+    }
+
+    .deg-0 {transform: translateY(-300px)}
+    .deg-72 {transform: rotate(72deg) translateY(-250px) rotate(-72deg) translateY(-50px)}
+    .deg-144 {transform: rotate(144deg) translateY(-250px) rotate(-144deg) translateY(-50px)}
+    .deg-216 {transform: rotate(216deg) translateY(-250px) rotate(-216deg) translateY(-50px)}
+    .deg-288 {transform: rotate(288deg) translateY(-250px) rotate(-288deg) translateY(-50px)}
+       
+       </style>
+
+    <body>
+        <div class="card_deck">
+            <div class="card deg-0"></div>
+            <div class="card deg-72"></div>
+            <div class="card deg-144"></div>
+            <div class="card deg-216"></div>
+            <div class="card deg-288"></div>
+        </div>
+    </body>
+
+</html>
