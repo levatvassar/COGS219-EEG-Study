@@ -41,7 +41,7 @@
     .deg-72 {transform: rotate(72deg) translateY(-250px) rotate(-72deg) translateY(-50px)}
     .deg-144 {transform: rotate(144deg) translateY(-250px) rotate(-144deg) translateY(-50px)}
     .deg-216 {transform: rotate(216deg) translateY(-250px) rotate(-216deg) translateY(-50px)}
-    .deg-288 {transform: rotate(288deg) translateY(-250px) rotate(-288deg)}
+    .deg-288 {transform: rotate(288deg) translateY(-250px) rotate(-288deg) translateY(-50px)}
   </style>
 
   <body></body>
@@ -116,7 +116,6 @@
       }
     };
 
-
     // Welcome + practice ---------------------------------------------------------------------------------------------------
     /* welcome instructions */
     var welcome_instructions =
@@ -190,11 +189,11 @@
     // [TUT CODE] what happens in one test
     var test = {
       type: jsPsychImageKeyboardResponse,
-      stimulus: jsPsych.timelineVariable('stimulus'), // image to be shown, (see var test_stimuli)
-      choices: ['f', 'j'], // the options a participant can press
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      choices: ['f', 'j'],
       data: {
-        task: 'response', // tagged as a 'response' trial (for data aggregation)
-        correct_response: jsPsych.timelineVariable('correct_response') // giving correct response for stimulus (see var test_stimuli)
+        task: 'response',
+        correct_response: jsPsych.timelineVariable('correct_response')
       },
       on_finish: function(data){
         data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
@@ -232,8 +231,9 @@
 
     // I like having all of these in the same place.
     timeline.push(welcome_instructions);
-    timeline.push(practice_instructions);
-    timeline.push(choice);
+    //timeline.push(practice_instructions);
+    //timeline.push(choice);
+    timeline.push(practice_procedure)
     //timeline.push(test_procedure);
     //timeline.push(debrief_block);
 
