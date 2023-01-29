@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Card Betting Task</title>
+    <script src=jspsych/jspsych.js></script>
+    <script src=jspsych/plugin-html-keyboard-response.js></script>
+    <script src=jspsych/plugin-image-keyboard-response.js></script>
+    <script src=jspsych/plugin-preload.js></script>
+<<<<<<< HEAD
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css"/>
+=======
+    <script src="jspsych/plugin-canvas-keyboard-response.js"></script>
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+>>>>>>> refs/remotes/origin/main
+  </head>
+
+  <style>
+    p {color: #5A5A5A; font-size: 20px;}
+    .RED {color: red; font-weight: bold;}
+    .BLACK {color: black; font-weight: bold;}
+    .fixation {color: #5A5A5A; font-size: 60px; font-weight: bold;}
+    .choice_container div {width: 200px; height: 100px; font-size: 60px;}
+    .card_deck
+    {
+        margin: 0;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 500px;
+        height: 500px;
+        border-radius: 100%;
+    }
+    .card
+    {
+        position: absolute;
+        top: 50%;
+        width: 80px;
+        height: 100px;
+        background: grey;
+    }
+    .deg-0 {transform: translateY(-300px)}
+    .deg-72 {transform: rotate(72deg) translateY(-250px) rotate(-72deg) translateY(-50px)}
+    .deg-144 {transform: rotate(144deg) translateY(-250px) rotate(-144deg) translateY(-50px)}
+    .deg-216 {transform: rotate(216deg) translateY(-250px) rotate(-216deg) translateY(-50px)}
+    .deg-288 {transform: rotate(288deg) translateY(-250px) rotate(-288deg)}
+  </style>
+
+  <body></body>
+
+  <script>
+    // Initiate jsPsych
+    var jsPsych = initJsPsych
+    ({
+      on_finish: function()
+      {jsPsych.data.displayData();}
+    });
+
+    var timeline = [];
+
+<<<<<<< HEAD
+    // Reusable trial blocks ----------------------------------------------------------------------------------------------
+    var choice =
+    {
+=======
+    function drawRect(c) {
+      var ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.fillStyle = "red";
+      ctx.fillRect(100, 100, 100, 200);
+      // ctx.stroke();
+    }
+
+    var welcome = {
+>>>>>>> refs/remotes/origin/main
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+          <div class="RED" style="text-align: right;">RED</div>
+          <div class="fixation">+</div>
+          <div class="BLACK" style="text-align: left;">BLACK</div>
+        </div>
+      `,
+      choices: ['ArrowLeft', 'ArrowRight'],
+      task: 'response'
+    };
+
+    // DUDE how to cycle thru divs as elems in stimuli array if theyre all wrapped in one big container mannn
+    var card_deck =
+    [
+      {stimulus: '<div class="card deg-0"></div>'},
+      {stimulus: '<div class="card deg-72"></div>'},
+      {stimulus: '<div class="card deg-144"></div>'},
+      {stimulus: '<div class="card deg-216"></div>'},
+      {stimulus: '<div class="card deg-288"></div>'}
+    ];
+
+    // Not working
+    var result_grey_deck =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+      <div class="card_deck">
+        <div class="card deg-0"></div>
+        <div class="card deg-72"></div>
+        <div class="card deg-144"></div>
+        <div class="card deg-216"></div>
+        <div class="card deg-288"></div>
+      </div>
+      `,
+      trial_duration: 5000,
+      choices: 'NO_KEYS',
+      data: {task: 'result grey deck'}
+    }
+
+
+    // [TUT CODE]
+    var fixation =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<div style="font-size:60px;">+</div>',
+      choices: "NO_KEYS",
+      trial_duration: function(){
+        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+      },
+      data: {
+        task: 'fixation'
+      }
+    };
+
+<<<<<<< HEAD
+=======
+    // defining variables for stimulus, images paired w/ correct responses
+    var test_stimuli = [
+      // { stimulus: "img/blue.png", correct_response: 'f'},
+      // { stimulus: "img/orange.png", correct_response: 'j'}
+      // {stimulus: drawRect, correct_response: 'f'}
+    ];
+>>>>>>> refs/remotes/origin/main
+
+    // Welcome + practice ---------------------------------------------------------------------------------------------------
+    /* welcome instructions */
+    var welcome_instructions =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <p>Welcome and thank you for participating in this study!</p>
+        <br>
+        <p>In each trial, you will predict whether there will be more
+            <span class="RED">RED</span> or
+            <span class="BLACK">BLACK</span> cards.</p>
+        <p>Afterwards, on the next slide, a deck of 5 cards will appear.</p>
+        <br>
+        <p>Each card has a 50% chance of appearing as either color.</p>
+        <p>If you correctly predicted the color of most of the cards, you win the round.</p>
+        <p>Otherwise, you lose the round.</p>
+        <br>
+        <p>The next few slides will serve as a tutorial.</p>
+        <br>
+        <p>Press any key to move on to the next slide.</p>
+      `,
+      post_trial_gap: 200
+    };
+
+    /* practice round instructions */
+    var practice_instructions =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <p>We will now go through <strong>2</strong> practice rounds.</p>
+        <p>On the next slide, you will see the words
+          “<span class="RED">RED</span>” and
+          “<span class="BLACK">BLACK</span>”.</p>
+        <p>Click ← on your keyboard to choose
+          “<span class="RED">RED</span>” or → to choose
+          “<span class="BLACK">BLACK</span>”.</p>
+        <br>
+        <p>Please try to stay focused on the fixation cross in the center and reduce blinking during trials.</p>
+        <p>Press any key to move on to the next slide.</p>
+      `,
+      post_trial_gap: 200
+    };
+
+    /* practice round post-choice instruction */
+    var practice_post_choice_instructions =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <p>Great!</p>
+        <p>On the following slide, you will see a deck of 5 cards.</p>
+        <p>The color of each card will be revealed one by one. You will not need to press any keys.</p>
+        <br>
+        <p>If more cards in the deck are in your chosen color than the other color, you win this round.</p>
+        <p>Otherwise, you lose this round.</p>
+      `,
+      post_trial_gap: 200
+    };
+
+    /* 2 practice trials */
+    var practice_procedure =
+    {
+      timeline: [practice_instructions, choice, practice_post_choice_instructions, result_grey_deck],
+      timeline_variables: test_stimuli,
+      randomize_order: true,
+      repetitions: 5
+    };
+
+    // [TUT CODE] what happens in one test
+    var test = {
+      type: jsPsychCanvasKeyboardResponse,
+      // stimulus: jsPsych.timelineVariable('stimulus'), // image to be shown, (see var test_stimuli)
+      stimulus: drawRect,
+      choices: ['f', 'j'], // the options a participant can press
+      data: {
+        task: 'response', // tagged as a 'response' trial (for data aggregation)
+        // correct_response: jsPsych.timelineVariable('correct_response') // giving correct response for stimulus (see var test_stimuli)
+      },
+      on_finish: function(data){
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      }
+    };
+
+    // [TUT CODE]
+    var test_stimuli = [
+      { stimulus: "img/blue.png",  correct_response: 'f'},
+      { stimulus: "img/orange.png",  correct_response: 'j'}
+    ];
+
+    // [TUT CODE]
+    var test_procedure = {
+      timeline: [fixation, test],
+      timeline_variables: test_stimuli,
+      randomize_order: true,
+      repetitions: 5
+    };
+
+    // [TUT CODE] to show at end of trials. gives info on how participant did.
+    var debrief_block = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function() {
+        var trials = jsPsych.data.get().filter({task: 'response'}); // getting # of response trials
+        var correct_trials = trials.filter({correct: true}); // filtering for correct for # correct answers
+        var accuracy = Math.round(correct_trials.count() / trials.count() * 100); // proportion
+        var rt = Math.round(correct_trials.select('rt').mean()); // mean reaction time
+
+        return `<p>You responded correctly on ${accuracy}% of the trials.</p>
+      <p>Your average response time was ${rt}ms.</p>
+      <p>Press any key to complete the experiment. Thank you!</p>`;
+      }
+    };
+
+    // I like having all of these in the same place.
+    timeline.push(welcome_instructions);
+    timeline.push(practice_instructions);
+    timeline.push(choice);
+    //timeline.push(test_procedure);
+    //timeline.push(debrief_block);
+
+    jsPsych.run(timeline); // run it all!
+  </script>
+</html>
