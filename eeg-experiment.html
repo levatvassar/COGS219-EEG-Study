@@ -47,7 +47,7 @@
   <body></body>
 
   <script>
-    // Set up ------------------------------------------------------------------------------------------------------------
+    // Set up -----------------------------------------------------------------------------------------------------------------------
     
     /* initiate jsPsych trial */
     var jsPsych = initJsPsych
@@ -59,7 +59,7 @@
     /* declare vars here */
     var timeline = [];
 
-    // Reusable trial blocks ----------------------------------------------------------------------------------------------
+    // Reusable trial blocks ========================================================================================================
     
     /* choice trial */
     var choice =
@@ -76,16 +76,6 @@
       choices: ['ArrowLeft', 'ArrowRight'],
       data: {task: 'response'}
     };
-
-    // DUDE how to cycle thru divs as elems in stimuli array if theyre all wrapped in one big container mannn
-    var card_deck =
-    [
-      {stimulus: 'deg-0'},
-      {stimulus: 'deg-72'},
-      {stimulus: 'deg-144'},
-      {stimulus: 'deg-216'},
-      {stimulus: 'deg-288'}
-    ];
 
     /* result grey deck trial */
     var result_grey_deck =
@@ -118,6 +108,7 @@
     };
 
     /* result deck */
+    // TODO: make each card appear one by one -> have to make 5 different trial vars?
     var result_deck =
     {
       type: jsPsychHtmlKeyboardResponse,
@@ -141,10 +132,13 @@
         </div>
         `;
       },
-      choices: 'NO_KEYS'
+      choices: 'NO_KEYS',
+      post_trial_gap: 100,
+      data: {task: 'result deck'}
     };
 
-    // Welcome + practice trials --------------------------------------------------------------------------------------------
+    // Welcome + practice trials ====================================================================================================
+    
     /* welcome instructions */
     var welcome_instructions =
     {
@@ -166,7 +160,7 @@
         <br>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 200
+      post_trial_gap: 100
     };
 
     /* practice round instructions */
@@ -186,7 +180,7 @@
         <p>Please try to stay focused on the fixation cross in the center and reduce blinking during trials.</p>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 200
+      post_trial_gap: 100
     };
 
     /* practice round post-choice instruction */
@@ -202,14 +196,38 @@
         <p>If more cards in the deck are in your chosen color than the other color, you win this round.</p>
         <p>Otherwise, you lose this round.</p>
       `,
-      post_trial_gap: 200
+      post_trial_gap: 100
+    };
+
+    /* practice guided trial end instructions */
+    // TODO: make conditional such that it either shows winning or losing message
+    // which involves figuring out how to track whether parti made correct response posthumously
+    var practice_guided_trial_end_instructions =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <p>Well done!</p>
+        <br>
+        <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
+        <br>
+        <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
+      `,
+      post_trial_gap: 100
     };
 
     /* 2 practice trials */
+    // TODO: practice_guided_trial_end_instructions isn't showing up after result_deck
     var practice_procedure =
     {
-      timeline: [practice_instructions, choice, practice_post_choice_instructions, result_grey_deck, result_deck],
+      timeline:   [practice_instructions,
+                  choice,
+                  practice_post_choice_instructions,
+                  result_grey_deck,
+                  result_deck,
+                  practice_guided_trial_end_instructions]
     };
+    // Practice trials end ==========================================================================================================
 
     // [TUT CODE] to show at end of trials. gives info on how participant did.
     var debrief_block = {
@@ -226,7 +244,7 @@
       }
     };
 
-    // I like having all of these in the same place.
+    // Timeline push and run --------------------------------------------------------------------------------------------------------
     timeline.push(welcome_instructions);
     timeline.push(practice_procedure)
     //timeline.push(debrief_block);
