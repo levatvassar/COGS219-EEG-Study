@@ -47,19 +47,23 @@
   <body></body>
 
   <script>
-    // Initiate jsPsych
+    // Set up ------------------------------------------------------------------------------------------------------------
+    
+    /* initiate jsPsych trial */
     var jsPsych = initJsPsych
     ({
       on_finish: function()
       {jsPsych.data.displayData();}
     });
 
+    /* declare vars here */
     var timeline = [];
 
     // Reusable trial blocks ----------------------------------------------------------------------------------------------
+    
+    /* choice trial */
     var choice =
     {
-
       type: jsPsychHtmlKeyboardResponse,
       stimulus:
       `
@@ -70,20 +74,20 @@
         </div>
       `,
       choices: ['ArrowLeft', 'ArrowRight'],
-      task: 'response'
+      data: {task: 'response'}
     };
 
     // DUDE how to cycle thru divs as elems in stimuli array if theyre all wrapped in one big container mannn
     var card_deck =
     [
-      {stimulus: '<div class="card deg-0"></div>'},
-      {stimulus: '<div class="card deg-72"></div>'},
-      {stimulus: '<div class="card deg-144"></div>'},
-      {stimulus: '<div class="card deg-216"></div>'},
-      {stimulus: '<div class="card deg-288"></div>'}
+      {stimulus: 'deg-0'},
+      {stimulus: 'deg-72'},
+      {stimulus: 'deg-144'},
+      {stimulus: 'deg-216'},
+      {stimulus: 'deg-288'}
     ];
 
-    // working!
+    /* result grey deck trial */
     var result_grey_deck =
     {
       type: jsPsychHtmlKeyboardResponse,
@@ -97,34 +101,50 @@
         <div class="card deg-288"></div>
       </div>
       `,
-      trial_duration: 5000,
+      trial_duration: 2000,
       choices: 'NO_KEYS',
       data: {task: 'result grey deck'}
-    }
-
-
-    // [TUT CODE]
-    var fixation =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: '<div style="font-size:60px;">+</div>',
-      choices: "NO_KEYS",
-      trial_duration: function(){
-        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
-      },
-      data: {
-        task: 'fixation'
-      }
     };
 
-    // defining variables for stimulus, images paired w/ correct responses
-    var test_stimuli = [
-      // { stimulus: "img/blue.png", correct_response: 'f'},
-      // { stimulus: "img/orange.png", correct_response: 'j'}
-      // {stimulus: drawRect, correct_response: 'f'}
-    ];
+    /* generate card sequence */
+    function cardColorSeqGen()
+    {
+      var colorArr = [5];
 
-    // Welcome + practice ---------------------------------------------------------------------------------------------------
+      for (var i=0; i<5; i++)
+      {colorArr[i] = Math.round(Math.random());}
+
+      return colorArr;
+    };
+
+    /* result deck */
+    var result_deck =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function()
+      {
+        var colorArr = cardColorSeqGen();
+
+        const cardCol0 = colorArr[0] == 0 ? 'red' : 'black';
+        const cardCol72 = colorArr[1]== 0 ? 'red' : 'black';
+        const cardCol144 = colorArr[2]== 0 ? 'red' : 'black';
+        const cardCol216 = colorArr[3]== 0 ? 'red' : 'black';
+        const cardCol288 = colorArr[4]== 0 ? 'red' : 'black';
+
+        return `
+        <div class ="card_deck">
+          <div class ="card deg-0" style="background: ${cardCol0}"></div>
+          <div class ="card deg-72" style="background: ${cardCol72}"></div>
+          <div class ="card deg-144" style="background: ${cardCol144}"></div>
+          <div class ="card deg-216" style="background: ${cardCol216}"></div>
+          <div class ="card deg-288" style="background: ${cardCol288}"></div>
+        </div>
+        `;
+      },
+      choices: 'NO_KEYS'
+    };
+
+    // Welcome + practice trials --------------------------------------------------------------------------------------------
     /* welcome instructions */
     var welcome_instructions =
     {
@@ -188,38 +208,7 @@
     /* 2 practice trials */
     var practice_procedure =
     {
-      timeline: [practice_instructions, choice, practice_post_choice_instructions, result_grey_deck],
-      timeline_variables: test_stimuli,
-      randomize_order: true,
-      repetitions: 5
-    };
-
-    // [TUT CODE] what happens in one test
-    var test = {
-      type: jsPsychImageKeyboardResponse,
-      stimulus: jsPsych.timelineVariable('stimulus'),
-      choices: ['f', 'j'],
-      data: {
-        task: 'response',
-        correct_response: jsPsych.timelineVariable('correct_response')
-      },
-      on_finish: function(data){
-        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
-      }
-    };
-
-    // [TUT CODE]
-    var test_stimuli = [
-      { stimulus: "img/blue.png",  correct_response: 'f'},
-      { stimulus: "img/orange.png",  correct_response: 'j'}
-    ];
-
-    // [TUT CODE]
-    var test_procedure = {
-      timeline: [fixation, test],
-      timeline_variables: test_stimuli,
-      randomize_order: true,
-      repetitions: 5
+      timeline: [practice_instructions, choice, practice_post_choice_instructions, result_grey_deck, result_deck],
     };
 
     // [TUT CODE] to show at end of trials. gives info on how participant did.
@@ -239,10 +228,7 @@
 
     // I like having all of these in the same place.
     timeline.push(welcome_instructions);
-    //timeline.push(practice_instructions);
-    //timeline.push(choice);
     timeline.push(practice_procedure)
-    //timeline.push(test_procedure);
     //timeline.push(debrief_block);
 
     jsPsych.run(timeline); // run it all!
