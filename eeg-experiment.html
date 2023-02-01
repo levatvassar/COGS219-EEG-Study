@@ -107,36 +107,110 @@
       return colorArr;
     };
 
-    /* result deck */
-    // TODO: make each card appear one by one -> have to make 5 different trial vars?
-    var result_deck =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
-      {
-        var colorArr = cardColorSeqGen();
-
-        const cardCol0 = colorArr[0] == 0 ? 'red' : 'black';
-        const cardCol72 = colorArr[1]== 0 ? 'red' : 'black';
-        const cardCol144 = colorArr[2]== 0 ? 'red' : 'black';
-        const cardCol216 = colorArr[3]== 0 ? 'red' : 'black';
-        const cardCol288 = colorArr[4]== 0 ? 'red' : 'black';
-
-        return `
-        <div class ="card_deck">
-          <div class ="card deg-0" style="background: ${cardCol0}"></div>
-          <div class ="card deg-72" style="background: ${cardCol72}"></div>
-          <div class ="card deg-144" style="background: ${cardCol144}"></div>
-          <div class ="card deg-216" style="background: ${cardCol216}"></div>
-          <div class ="card deg-288" style="background: ${cardCol288}"></div>
-        </div>
-        `;
-      },
-      choices: 'NO_KEYS',
-      post_trial_gap: 100,
-      data: {task: 'result deck'}
+    /* card reveal sequence */
+    var card_reveal = {
+      timeline: [
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: grey"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+          return html;},
+          choices: "NO_KEYS",
+          trial_duration: 2000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus:function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')}"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')}"></div>
+              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')}"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+          
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')}"></div>
+              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')}"></div>
+              <div class ="card deg-288" style="background: ${jsPsych.timelineVariable('card5')}"></div>
+            </div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        }
+      ],
+      timeline_variables :[
+        {card1: "red", card2: "red", card3: "red", card4: "black", card5: "black"}
+      ],
+      sample: {
+        type: "without-replacement",
+        size: 1
+      }
     };
-
+    
     // Welcome + practice trials ====================================================================================================
     
     /* welcome instructions */
@@ -223,8 +297,7 @@
       timeline:   [practice_instructions,
                   choice,
                   practice_post_choice_instructions,
-                  result_grey_deck,
-                  result_deck,
+                  card_reveal,
                   practice_guided_trial_end_instructions]
     };
     // Practice trials end ==========================================================================================================
