@@ -74,26 +74,8 @@
         </div>
       `,
       choices: ['ArrowLeft', 'ArrowRight'],
-      data: {task: 'response'}
-    };
-
-    /* result grey deck trial */
-    var result_grey_deck =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
-      <div class="card_deck">
-        <div class="card deg-0"></div>
-        <div class="card deg-72"></div>
-        <div class="card deg-144"></div>
-        <div class="card deg-216"></div>
-        <div class="card deg-288"></div>
-      </div>
-      `,
-      trial_duration: 2000,
-      choices: 'NO_KEYS',
-      data: {task: 'result grey deck'}
+      data:
+      {task: 'response'}
     };
 
     /* generate card sequence */
@@ -107,8 +89,8 @@
       return colorArr;
     };
 
-    /* card reveal sequence */
-    var card_reveal = {
+    /* trial card reveal sequence */
+    var trial_card_reveal = {
       timeline: [
         {
           type: jsPsychHtmlKeyboardResponse,
@@ -184,7 +166,6 @@
             return html;},
           choices: "NO_KEYS",
           trial_duration: 3000
-          
         },
         {
           type: jsPsychHtmlKeyboardResponse,
@@ -205,10 +186,6 @@
       timeline_variables :[
         {card1: "red", card2: "red", card3: "red", card4: "black", card5: "black"}
       ],
-      sample: {
-        type: "without-replacement",
-        size: 1
-      }
     };
     
     // Welcome + practice trials ====================================================================================================
@@ -257,6 +234,30 @@
       post_trial_gap: 100
     };
 
+    /* practice choice trial */
+    var practice_choice =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+          <div class="RED" style="text-align: right;">RED</div>
+          <div class="fixation">+</div>
+          <div class="BLACK" style="text-align: left;">BLACK</div>
+        </div>
+      `,
+      choices: ['ArrowLeft', 'ArrowRight'],
+      data:
+      {
+        task: 'practice_response',
+        correct_response: 'ArrowLeft'
+      },
+      on_finish: function(data)
+      {
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      }
+    };
+
     /* practice round post-choice instruction */
     var practice_post_choice_instructions =
     {
@@ -273,20 +274,156 @@
       post_trial_gap: 100
     };
 
+    /* practice trial card reveal */
+    var practice_card_reveal =
+    {
+      timeline:
+      [
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function()
+          {
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: grey"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+          return html;
+          },
+          choices: "NO_KEYS",
+          trial_duration: 2000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function()
+          {
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: red"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;
+          },
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function()
+          {
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: red"></div>
+              <div class ="card deg-72" style="background: red"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;
+          },
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus:function()
+          {
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: red"></div>
+              <div class ="card deg-72" style="background: red"></div>
+              <div class ="card deg-144" style="background: red"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;
+          },
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function()
+          {
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: red"></div>
+              <div class ="card deg-72" style="background: red"></div>
+              <div class ="card deg-144" style="background: red"></div>
+              <div class ="card deg-216" style="background: black"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>`;
+            return html;
+          },
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function()
+          {
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: red"></div>
+              <div class ="card deg-72" style="background: red"></div>
+              <div class ="card deg-144" style="background: red"></div>
+              <div class ="card deg-216" style="background: black"></div>
+              <div class ="card deg-288" style="background: black"></div>
+            </div>`;
+            return html;
+          },
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        }
+      ],
+    };
+
+    function correctResponseCount(dataTag) 
+    {
+      var response = jsPsych.data.get().filter({task: dataTag});
+      var correct_responses = response.filter({correct: true});
+      return correct_responses.count();
+    };
+
     /* practice guided trial end instructions */
-    // TODO: make conditional such that it either shows winning or losing message
-    // which involves figuring out how to track whether parti made correct response posthumously
     var practice_guided_trial_end_instructions =
     {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
-        <p>Well done!</p>
-        <br>
-        <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
-        <br>
-        <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
-      `,
+      stimulus: function()
+      {
+        var practice_correct_responses = correctResponseCount('practice_response')
+        var retHtml;
+
+        if (practice_correct_responses >= 1)
+        {
+          retHtml =
+          `
+          <p>Well done!</p>
+          <br>
+          <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
+          <br>
+          <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
+          `;
+        }
+        else
+        {
+          retHtml =
+          `
+          <p>Whoops, better luck next time!</p>
+          <br>
+          <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
+          <br>
+          <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
+          `;
+        }
+        return retHtml;
+      },
       post_trial_gap: 100
     };
 
@@ -295,9 +432,9 @@
     var practice_procedure =
     {
       timeline:   [practice_instructions,
-                  choice,
+                  practice_choice,
                   practice_post_choice_instructions,
-                  card_reveal,
+                  practice_card_reveal,
                   practice_guided_trial_end_instructions]
     };
     // Practice trials end ==========================================================================================================
