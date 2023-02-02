@@ -48,7 +48,7 @@
 
   <script>
     // Set up -----------------------------------------------------------------------------------------------------------------------
-    
+  
     /* initiate jsPsych trial */
     var jsPsych = initJsPsych
     ({
@@ -61,6 +61,18 @@
 
     // Reusable trial blocks ========================================================================================================
     
+    /* trial title card */
+    var unguided_practice_trial_0_title =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+      <p><strong>Practice Trial 0</strong></p>
+      <br>
+      <p>Press any key to move on to the next slide to place your bet.</p>
+      `
+    }
+
     /* choice trial */
     var choice =
     {
@@ -75,7 +87,12 @@
       `,
       choices: ['ArrowLeft', 'ArrowRight'],
       data:
-      {task: 'response'}
+      {
+        task: 'response',
+        red: 'ArrowLeft'
+      },
+      on_finish: function(data)
+      {data.color = jsPsych.pluginAPI.compareKeys(data.response, data.red) ? 'red' : 'black';}
     };
 
     /* generate card sequence */
@@ -183,9 +200,8 @@
           trial_duration: 3000
         }
       ],
-      timeline_variables :[
-        {card1: "red", card2: "red", card3: "red", card4: "black", card5: "black"}
-      ],
+
+      timeline_variables :[{card1: "red", card2: "red", card3: "red", card4: "black", card5: "black"}],
     };
     
     // Welcome + practice trials ====================================================================================================
@@ -234,29 +250,24 @@
       post_trial_gap: 100
     };
 
-    /* practice choice trial */
-    var practice_choice =
+    /* show choice trial */
+    var show_practice_choice =
     {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
-        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
-          <div class="RED" style="text-align: right;">RED</div>
-          <div class="fixation">+</div>
-          <div class="BLACK" style="text-align: left;">BLACK</div>
-        </div>
-      `,
-      choices: ['ArrowLeft', 'ArrowRight'],
-      data:
+      stimulus: function()
       {
-        task: 'practice_response',
-        correct_response: 'ArrowLeft'
-      },
-      on_finish: function(data)
-      {
-        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+        var color = jsPsych.data.get().filter({task: 'response'}).select('color').values[0];
+        console.log(color);
+        var retHtml;
+
+        if (color == 'red')
+        {retHtml = `<p>Chosen option: <span class="RED">RED</span></p>`;}
+        else
+        {retHtml = `<p>Chosen option: <span class="BLACK">BLACK</span><p>`;}
+
+        return retHtml;
       }
-    };
+    }
 
     /* practice round post-choice instruction */
     var practice_post_choice_instructions =
@@ -266,10 +277,12 @@
       `
         <p>Great!</p>
         <p>On the following slide, you will see a deck of 5 cards.</p>
-        <p>The color of each card will be revealed one by one. You will not need to press any keys.</p>
+        <p>The color of each card will be automatically revealed one by one.</p>
         <br>
         <p>If more cards in the deck are in your chosen color than the other color, you win this round.</p>
         <p>Otherwise, you lose this round.</p>
+        <br>
+        <p>Press any key to move on to the next slide.</p>
       `,
       post_trial_gap: 100
     };
@@ -384,23 +397,16 @@
       ],
     };
 
-    function correctResponseCount(dataTag) 
-    {
-      var response = jsPsych.data.get().filter({task: dataTag});
-      var correct_responses = response.filter({correct: true});
-      return correct_responses.count();
-    };
-
     /* practice guided trial end instructions */
     var practice_guided_trial_end_instructions =
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function()
       {
-        var practice_correct_responses = correctResponseCount('practice_response')
+        var practiceResponse0 = jsPsych.data.get().filter({task: 'response'}).select('color').values[0];
         var retHtml;
 
-        if (practice_correct_responses >= 1)
+        if (practiceResponse0 == 'red')
         {
           retHtml =
           `
@@ -432,10 +438,15 @@
     var practice_procedure =
     {
       timeline:   [practice_instructions,
-                  practice_choice,
+                  choice,
+                  show_practice_choice,
                   practice_post_choice_instructions,
                   practice_card_reveal,
-                  practice_guided_trial_end_instructions]
+                  practice_guided_trial_end_instructions,
+                  unguided_practice_trial_0_title,
+                  choice,
+                  show_practice_choice,
+                ]
     };
     // Practice trials end ==========================================================================================================
 
