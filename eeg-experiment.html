@@ -37,11 +37,11 @@
         height: 100px;
         background: grey;
     }
-    .deg-0 {transform: translateY(-250px)}
-    .deg-72 {transform: rotate(72deg) translateY(-200px) rotate(-72deg) translateY(-50px)}
-    .deg-144 {transform: rotate(144deg) translateY(-200px) rotate(-144deg) translateY(-50px)}
-    .deg-216 {transform: rotate(216deg) translateY(-200px) rotate(-216deg) translateY(-50px)}
-    .deg-288 {transform: rotate(288deg) translateY(-200px) rotate(-288deg) translateY(-50px)}
+    .deg-0 {transform: translateY(-200px)}
+    .deg-72 {transform: rotate(72deg) translateY(-150px) rotate(-72deg) translateY(-50px)}
+    .deg-144 {transform: rotate(144deg) translateY(-150px) rotate(-144deg) translateY(-50px)}
+    .deg-216 {transform: rotate(216deg) translateY(-150px) rotate(-216deg) translateY(-50px)}
+    .deg-288 {transform: rotate(288deg) translateY(-150px) rotate(-288deg) translateY(-50px)}
   </style>
 
   <body></body>
@@ -439,6 +439,297 @@
     };
     // Practice trials end ==========================================================================================================
 
+    //  test trials ========================================================================================================
+
+    /* initialize trial number & money */
+    var trial_number = 1;
+    var money = 10;
+
+    /* initialize color container
+    color[0] is the winning color
+    color[1] is the losing color */
+    var color = [2];
+
+    /* initialize the equal win/lose sequence for the 80 test runs 
+    0 represent win condition
+    1 represent lose condition
+    */
+    function shuffle(array) { // array shuffle algorithm
+      let currentIndex = array.length,  randomIndex;
+        while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+      }
+      return array;
+    }
+
+    function equalOutcome(){ // shuffled array of 40 "1" and 40 "0"
+      var outcome = [80];
+      for (var i=0; i<=39; i++){
+        outcome [i] = 0 ;
+      }
+      for (var i = 40 ; i<=79; i++){
+        outcome [i] = 1 ;
+      }
+      shuffle(outcome);
+      return outcome;
+    }
+
+    var final_outcome = equalOutcome();
+
+    /* starting page */
+    /** can not update trial number right now **/
+    /** need to change the font to be consistant with the rest of the slide **/
+    var trial_info = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function(){
+        return `
+        <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+          <div class="trial" style="text-align: center;"><p>Trial ${trial_number}</p><p>Make your prediction on the next slide.</p></div>
+        </div>
+      `},
+      choices: "NO_KEYS",
+      trial_duration: 3000
+    }
+
+    /* choice trial page */ 
+    var choice =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `
+        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+          <div class="RED" style="text-align: right;">RED</div>
+          <div class="fixation">+</div>
+          <div class="BLACK" style="text-align: left;">BLACK</div>
+        </div>
+      `,
+      choices: ['ArrowLeft', 'ArrowRight'], //left -> red, right -> black
+      data: {task: 'response'},
+      on_finish: function(data){ // push corresponding color to the color container ** can not update the color variable **
+        if (jsPsych.pluginAPI.compareKeys(data.response, 'ArrowLeft')){
+          data.color = 'red';
+        }
+        else {
+          data.color = 'black';
+        }
+        if (final_outcome[trial_number] == 0){ // winning condition
+          if (data.color == 'red'){
+            color.push('red');
+            color.push('black');
+          }
+          else {
+            color.push('black');
+            color.push('red');
+          }
+        }
+        else { // losing condition
+          if (data.color == 'red'){
+            color.push('black');
+            color.push('red');
+          }
+          else {
+            color.push('red');
+            color.push('black');
+          }
+        }
+      }
+    }
+
+    /* choice infromation screen */ 
+    /** need to change the font to be consistant with the rest of the slide **/
+    var choice_info = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function(){
+        var pchoice = jsPsych.data.get().last(1).values()[0].color;
+        return`
+        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+          <div class="trial" style="text-align: center;"><p>Chosen Option: ${pchoice}</p></div>
+        </div>
+      `},
+      choices: "NO_KEYS",
+      trial_duration: 2000
+    }
+
+    /* card combination 
+    */ 
+    var card_comb = [
+      {card1: color[0], card2: color[0], card3: color[0], card4: color[0], card5: color[0]},
+      {card1: color[1], card2: color[0], card3: color[0], card4: color[0], card5: color[0]},
+      {card1: color[0], card2: color[1], card3: color[0], card4: color[0], card5: color[0]},
+      {card1: color[0], card2: color[0], card3: color[1], card4: color[0], card5: color[0]},
+      {card1: color[0], card2: color[0], card3: color[0], card4: color[1], card5: color[0]},
+      {card1: color[0], card2: color[0], card3: color[0], card4: color[0], card5: color[1]},
+      {card1: color[1], card2: color[1], card3: color[0], card4: color[0], card5: color[0]},
+      {card1: color[1], card2: color[0], card3: color[1], card4: color[0], card5: color[0]},
+      {card1: color[1], card2: color[0], card3: color[0], card4: color[1], card5: color[0]},
+      {card1: color[1], card2: color[0], card3: color[0], card4: color[0], card5: color[1]},
+      {card1: color[0], card2: color[1], card3: color[1], card4: color[0], card5: color[0]},
+      {card1: color[0], card2: color[1], card3: color[0], card4: color[1], card5: color[0]},
+      {card1: color[0], card2: color[1], card3: color[0], card4: color[0], card5: color[1]},
+      {card1: color[0], card2: color[0], card3: color[1], card4: color[1], card5: color[0]},
+      {card1: color[0], card2: color[0], card3: color[1], card4: color[0], card5: color[1]},
+      {card1: color[0], card2: color[0], card3: color[0], card4: color[1], card5: color[1]},
+    ]
+
+    /* card reveal sequence */
+    /** can not recieve updated color container **/
+    var card_reveal = {
+      timeline: [ // card reveal sequence
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: grey"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+          return html;},
+          choices: "NO_KEYS",
+          trial_duration: 2000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus:function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')}"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')}"></div>
+              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')}"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+          
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function(){
+            var html = 
+            `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')}"></div>
+              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')}"></div>
+              <div class ="card deg-288" style="background: ${jsPsych.timelineVariable('card5')}"></div>
+            </div>
+            <div class="fixation">+</div>`;
+            return html;},
+          choices: "NO_KEYS",
+          trial_duration: 3000
+        }
+      ],
+      timeline_variables : card_comb,
+      sample: {
+        type: "without-replacement",
+        size: 1
+      }
+    };
+
+    /* result page */
+    /** can not update money and trial_number **/
+    var result_page = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function(){
+        if (final_outcome[trial_number] == 0){
+          money += 0.2;
+          return `
+          <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+            <div class="trial" style="text-align: center;">
+              <p>Won 20 cents!</p>
+              <p>Total amount won:</p>
+              <p>$${money}</p></div>
+          </div>`
+        }
+        if (final_outcome[trial_number] == 1){
+          return `
+          <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+            <div class="trial" style="text-align: center;">
+              <p>Lost this Round.</p>
+              <p>Total amount won:</p>
+              <p>$${money}</p></div>
+          </div>`
+        }
+      },
+      choices: "NO_KEYS",
+      trial_duration: 2000,
+      on_finish: function(){
+        tiral_number =+ 1;
+      }
+    }
+
+    /* test run timeline */
+    var test_proc = {
+      timeline: [
+        trial_info,
+        choice,
+        choice_info,
+        card_reveal,
+        result_page
+      ],
+      repetitions: 16 // one block
+    }
+
+    // test trials end ========================================================================================================
+
+    
     // [TUT CODE] to show at end of trials. gives info on how participant did.
     var debrief_block = {
       type: jsPsychHtmlKeyboardResponse,
@@ -456,9 +747,9 @@
 
     // Timeline push and run --------------------------------------------------------------------------------------------------------
     timeline.push(welcome_instructions);
-    timeline.push(practice_procedure)
+    timeline.push(practice_procedure);
+    timeline.push(test_proc);
     //timeline.push(debrief_block);
-
     jsPsych.run(timeline); // run it all!
   </script>
 </html>
