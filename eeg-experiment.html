@@ -188,8 +188,8 @@
     function callMoney() { // call money
       return money;
     }
-    
-    function callBlock(){ // call block number
+
+    function callBlock() {
       return block_number;
     }
     
@@ -598,20 +598,6 @@
       trial_duration: 2000,
     }
 
-    /* test run timeline */
-    var test_proc = {
-      timeline: [
-        trial_title,
-        choice,
-        show_choice,
-        card_reveal,
-        result_page,
-      ],
-      timeline_variables: final_outcome[callBlock()],
-    }
-
-    // Block timeline ========================================================================================================
-
     var block_start = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function(){
@@ -647,15 +633,28 @@
 
     }
 
-    var block_proc = {
-      timeline: 
-      [
-        block_start,
-        test_proc,
-        block_end
-      ],
-      repetitions: 5,
+    var block_timeline = {
+      timeline: []
     }
+
+    /* test run timeline */
+    for(let i = 0; i < 5; i++){
+      var test_proc = {
+        timeline: [
+          trial_title,
+          choice,
+          show_choice,
+          card_reveal,
+          result_page,
+        ],
+        timeline_variables: final_outcome[i],
+      }
+      block_timeline.timeline.push(block_start);
+      block_timeline.timeline.push(test_proc);
+      block_timeline.timeline.push(block_end);
+    }
+
+    // Block timeline ========================================================================================================
     
     // [TUT CODE] to show at end of trials. gives info on how participant did.
     var debrief_block =
@@ -677,7 +676,7 @@
     TIMELINE.push(welcome_instructions);
     TIMELINE.push(practice_procedure);
     TIMELINE.push(practice_procedure_2)
-    TIMELINE.push(block_proc);
+    TIMELINE.push(block_timeline);
 
     //timeline.push(debrief_block);
     jsPsych.simulate(TIMELINE); // run it all!
