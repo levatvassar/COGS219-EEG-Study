@@ -93,42 +93,42 @@
     */
     var win_card_comb =
     [ 
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 0},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 0},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 1},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 2},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 3},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 4},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 5},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 6},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 7},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 8},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 9},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 10},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 11},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 12},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 13},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 14},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 15},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 0, id: 16},
     ]
 
     var lose_card_comb =
     [ 
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 1},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 1},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 17},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 18},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 19},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 20},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 21},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 22},
+      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 23},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 24},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 25},
+      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 26},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 27},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 28},
+      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 29},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 30},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 31},
+      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 1, id: 32},
     ]
 
     var all80trials = shuffleOutcome(); // array of arrays of all the card results 
@@ -297,7 +297,11 @@
           return html;
           },
           choices: "NO_KEYS",
-          trial_duration: 2000
+          trial_duration: 2000,
+          on_start: function(reveal_seq) {
+            var trig = jsPsych.timelineVariable('id')();
+            fetch('http://127.0.0.1:8000/trigger/usb/${trig})');
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
