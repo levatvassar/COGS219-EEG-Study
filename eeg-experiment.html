@@ -74,7 +74,7 @@
     var TIMELINE = [];
     var trial_number = 1; // initialize trial number
     var money = 10; // initialize the money won
-    var block_number = 1; // block number
+    var block_number = 0; // block number
 
     /* initialize color container 
     color[0] represent the color that participant bet on
@@ -623,6 +623,50 @@
 
     // Block timeline ========================================================================================================
 
+    var block_start = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function(){
+        var real_block_number = callBlock() + 1;
+        var html = `
+        <p>Block: <strong>${real_block_number}</strong></p>
+        `;
+        return html;
+      },
+      choices: "NO_KEYS",
+      trial_duration: 2000
+    }
+
+    var block_end = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function(){
+        var round_money = roundTo(callMoney(), 2);
+        var real_block_number = callBlock() + 1;
+        var html = `
+        <p>Block <strong>${real_block_number}</strong> ended</p>
+        <br>
+        <p>You won <strong>${round_money}.</p>        `
+        return html;
+      },
+
+      on_finish: function(){
+        block_number ++; 
+      },
+
+      simulation_options: {
+        simulate: false
+      }
+
+    }
+
+    var block_proc = {
+      timeline: 
+      [
+        block_start,
+        test_proc,
+        block_end
+      ],
+      repetitions: 5,
+    }
     
     // [TUT CODE] to show at end of trials. gives info on how participant did.
     var debrief_block =
