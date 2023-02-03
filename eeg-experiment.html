@@ -299,8 +299,8 @@
           choices: "NO_KEYS",
           trial_duration: 2000,
           on_start: function(reveal_seq) {
-            var trig = jsPsych.timelineVariable('id')();
-            fetch('http://127.0.0.1:8000/trigger/usb/${trig})');
+            var trig = jsPsych.timelineVariable('id');
+            fetch(`http://127.0.0.1:8000/trigger/usb/${trig})`);
           }
         },
         {
