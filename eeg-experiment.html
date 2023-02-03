@@ -15,6 +15,18 @@
     .BLACK {color: black; font-weight: bold;}
     .fixation {color: #5A5A5A; font-size: 60px; font-weight: bold;}
     .choice_container div {width: 200px; height: 100px; font-size: 60px;}
+    .show_choice_container
+    {
+      position: absolute;
+      display: flex;
+      top: 50%;
+      left: 50%;
+      margin-top: -75px;
+      margin-left: -200px;
+      justify-content: center;
+      width: 400px;
+      height: 150px;
+    }
     .card_deck
     {
         margin: 0;
@@ -254,9 +266,23 @@
         var retHtml;
 
         if (color == 'red')
-        {retHtml = `<p>Chosen option: <span class="RED">RED</span></p>`;}
+        {
+          retHtml = `
+          <div class="show_choice_container">
+          <p>Chosen option: <span class="RED">RED</span></p>
+          <div class="card" style="background: red;"></div>
+          </div>
+          `;
+        }
         else
-        {retHtml = `<p>Chosen option: <span class="BLACK">BLACK</span><p>`;}
+        {
+          retHtml = `
+          <div class="show_choice_container">
+          <p>Chosen option: <span class="BLACK">BLACK</span></p>
+          <div class="card" style="background: black;"></div>
+          </div>
+          `;
+        }
 
         return retHtml;
       },
