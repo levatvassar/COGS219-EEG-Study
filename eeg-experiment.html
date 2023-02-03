@@ -479,8 +479,46 @@
       post_trial_gap: 100
     };
 
+            /* 2nd practice trial card reveal */
+            var practice_2_card_reveal =
+    {
+      timeline: reveal_seq,
+      timeline_variables :[{card1: ()=>"black", card2: ()=>"black", card3: ()=>"red", card4: ()=>"red", card5: ()=>"black"}],
+    };
+
+      /* practice trial 2 end instructions */
+      var practice_2_end_instructions =
+    {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function()
+      {
+        var practiceResponse0 = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
+        var retHtml;
+
+        if (practiceResponse0 == 'black')
+        {
+          retHtml =
+          `
+          <p>Well done!</p>
+          <br>
+          <p>You will now begin with the real trials.</p>
+          `;
+        }
+        else
+        {
+          retHtml =
+          `
+          <p>Whoops, better luck next time!</p>
+          <br>
+          <p>You will now begin with the real trials.</p>
+          `;
+        }
+        return retHtml;
+      },
+      post_trial_gap: 100
+    };
+
     /* 2 practice trials */
-    /** yet to implement the second practice trial **/ 
     var practice_procedure =
     {
       timeline:
@@ -491,6 +529,17 @@
         practice_guided_post_choice_instructions,
         practice_guided_card_reveal,
         practice_guided_end_instructions,
+      ]
+    }
+
+    var practice_procedure_2 = 
+    {
+      timeline:
+      [
+        choice,
+        show_choice,
+        practice_2_card_reveal,
+        practice_2_end_instructions,
       ]
     }
 
@@ -562,6 +611,7 @@
     // Timeline push and run --------------------------------------------------------------------------------------------------------
     TIMELINE.push(welcome_instructions);
     TIMELINE.push(practice_procedure);
+    TIMELINE.push(practice_procedure_2)
     TIMELINE.push(test_proc);
 
     //timeline.push(debrief_block);
