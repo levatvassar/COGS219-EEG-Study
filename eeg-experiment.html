@@ -64,13 +64,18 @@
     // Reusable trial blocks ========================================================================================================
     
     /* trial title card */
+    function callTrial (){ // helper function to call trial_number dynamically
+      var current_trial = trial_number;
+      return current_trial;
+    }
+    
     var trial_title =
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function()
       {
         var html = `
-        <p>Trial: <strong>${trial_number}</strong></p>
+        <p>Trial: <strong>${callTrial()}</strong></p>
         <br>
         <p>Place your bet on the next slide.</p>
         `;
@@ -607,6 +612,7 @@
     var result_page = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function(){
+        trial_number++;
         if (jsPsych.timelineVariable('result') == 0){
           money += 0.2;
           return `
@@ -622,14 +628,10 @@
               <p>Lost this Round.</p></div>
           </div>`
         };
-        trial_number++;
       },
       choices: "NO_KEYS",
       trial_duration: 2000,
     }
-    
-    /** TODO: end screen for each block **/
-    var block_end = {}
 
     /* test run timeline */
     var test_proc = {
@@ -639,7 +641,6 @@
         show_choice,
         card_reveal,
         result_page,
-        // block_end
       ],
       timeline_variables: final_outcome[block_number],
     }
