@@ -160,7 +160,7 @@
      **/
     function makeItForty(comb){  // helper function: duplicate the array and append the first half of the array to the resulting array
       var comb_copy = comb.concat(comb);
-      var half_copy = comb.slice(0, (comb.length/2));
+      var half_copy = [comb[4], comb[12], comb[7], comb[2], comb[13], comb[9], comb[1], comb[15]];
       var forty_array = comb_copy.concat(half_copy);
 
       return forty_array
