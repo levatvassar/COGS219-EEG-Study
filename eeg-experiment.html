@@ -192,6 +192,10 @@
       return block_number;
     }
     
+    function roundTo(n, place) {    
+      return +(Math.round(n + "e+" + place) + "e-" + place);
+    }
+    
     // Reusable trial blocks ========================================================================================================
     
     /* trial title card */
