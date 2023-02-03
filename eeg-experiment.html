@@ -131,12 +131,19 @@
       {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 1},
     ]
 
-    var final_outcome = partition_array(shuffleOutcome(), 16); // array of arrays of all the card results 
+    var all80trials = shuffleOutcome(); // array of arrays of all the card results 
+    var final_outcome = [];
+    final_outcome[0] = all80trials.slice(0,16);
+    final_outcome[1] = all80trials.slice(16,32);
+    final_outcome[2] = all80trials.slice(32,48);
+    final_outcome[3] = all80trials.slice(48,64);
+    final_outcome[4] = all80trials.slice(64,80);
+
 
     // functions ====================================================================================================================
     
     /* generate random card sequence */
-    function cardColorSeqGen()
+    /*function cardColorSeqGen()
     {
       var colorArr = [5];
 
@@ -144,7 +151,7 @@
       {colorArr[i] = Math.round(Math.random());}
 
       return colorArr;
-    };
+    };*/
     
      /** create a shuffled array that contain the outcome info of all 80 trials,
      * each time it will generate an equal number of win and lose trials for each of the 16 card combination sequence
@@ -160,36 +167,18 @@
     }
 
     function shuffleOutcome(){ // create and shuffle card outcomes
-      var outcome = [80];
+      var outcome = [];
       var all_wcard_comb = makeItForty(win_card_comb);
       var all_lcard_comb = makeItForty(lose_card_comb);
 
-      for (var i=0; i<40; i++) // looping to put all the possible outcome into an array
-      {
-        outcome [i] = all_wcard_comb[i];
-      }
-      for (var i=40 ; i<80; i++)
-      {
-        outcome [i] = all_lcard_comb[(i-40)];
-      }
+      outcome = all_wcard_comb.concat(all_lcard_comb);
 
       // shuffle the determined outcomes
       var shuffled_outcome = jsPsych.randomization.shuffle(outcome); 
       return shuffled_outcome;
     }
 
-    function partition_array(a, n){ // partition an array a into group of size n
-      const res = [];
-      for(let i = 0; i < a.length; i++) {
-        if(i % n == 0){
-         res.push([a[i]]); // start a new array
-      }
-      else{
-         res[res.length-1].push(a[i]); // push the current value into the array
-      };
-    };
-    return res;
-    }
+    
     
     /* Dynamic parameters helper function */
     function callTrial (){ // call trial number 
@@ -647,6 +636,6 @@
     TIMELINE.push(test_proc);
 
     //timeline.push(debrief_block);
-    jsPsych.run(TIMELINE); // run it all!
+    jsPsych.simulate(TIMELINE); // run it all!
   </script>
 </html>
