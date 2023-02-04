@@ -227,23 +227,6 @@
     
     // Reusable trial blocks ========================================================================================================
     
-    /* trial title card */
-    var trial_title =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
-      {
-        var html = `
-        <p>Trial: <strong>${callTrial()}</strong></p>
-        <br>
-        <p>Place your bet on the next slide.</p>
-        `;
-        return html;
-      },
-      choices: "NO_KEYS",
-      trial_duration: 3000
-    }
-
     /* choice trial */
     var choice =
     {
@@ -278,7 +261,7 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function()
       {
-        var color = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
+        var color = jsPsych.data.get().filter({task: 'choice_response'}).last(1).select('color').values[0];
         console.log(color);
         var retHtml;
 
@@ -311,12 +294,11 @@
     
     /* card reveal sequence */
     var reveal_seq = [
-      {
+        {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: grey"></div>
               <div class ="card deg-72" style="background: grey"></div>
               <div class ="card deg-144" style="background: grey"></div>
@@ -324,21 +306,20 @@
               <div class ="card deg-288" style="background: grey"></div>
             </div>
             <div class="fixation">+</div>`;
-          return html;
+            return html;
           },
           choices: "NO_KEYS",
           trial_duration: 2000,
-          on_load: function(reveal_seq) {
+          on_load: function (reveal_seq) {
             var trig = jsPsych.timelineVariable('id');
             fetch(`http://127.0.0.1:8000/trigger/usb/${trig})`);
           }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
               <div class ="card deg-72" style="background: grey"></div>
               <div class ="card deg-144" style="background: grey"></div>
@@ -351,19 +332,19 @@
           },
           choices: "NO_KEYS",
           trial_duration: 3000,
-          on_load: ()=>{
-            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
             task: 'reveal',
-            eeg_event_id: ()=>eeg_event_counter++,
+            eeg_event_id: () => eeg_event_counter++,
             card: 1,
-            color: ()=>jsPsych.timelineVariable('card1')(),
+            color: () => jsPsych.timelineVariable('card1')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
-            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
-            card_value: ()=>{
-              if(jsPsych.timelineVariable('card1')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card1')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
                 return 0;
@@ -374,10 +355,9 @@
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
               <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
               <div class ="card deg-144" style="background: grey"></div>
@@ -390,35 +370,34 @@
           },
           choices: "NO_KEYS",
           trial_duration: 3000,
-          on_load: ()=>{
-            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
             task: 'reveal',
-            eeg_event_id: ()=>eeg_event_counter++,
+            eeg_event_id: () => eeg_event_counter++,
             card: 2,
-            color: ()=>jsPsych.timelineVariable('card2')(),
+            color: () => jsPsych.timelineVariable('card2')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
-            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
-            card_value: ()=>{
-              if(jsPsych.timelineVariable('card2')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card2')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
                 return 0;
               }
             },
-            wins_so_far: ()=>{
-              return jsPsych.data.get().filter({task:'reveal'}).last(1).select('card_value').sum()
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(1).select('card_value').sum()
             }
           }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus:function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
               <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
               <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
@@ -431,35 +410,34 @@
           },
           choices: "NO_KEYS",
           trial_duration: 3000,
-          on_load: ()=>{
-            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
             task: 'reveal',
-            eeg_event_id: ()=>eeg_event_counter++,
+            eeg_event_id: () => eeg_event_counter++,
             card: 3,
-            color: ()=>jsPsych.timelineVariable('card3')(),
+            color: () => jsPsych.timelineVariable('card3')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
-            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
-            card_value: ()=>{
-              if(jsPsych.timelineVariable('card3')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card3')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
                 return 0;
               }
             },
-            wins_so_far: ()=>{
-              return jsPsych.data.get().filter({task: 'reveal'}).last(2).select('card_value').sum()
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(2).select('card_value').sum()
             }
           }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
               <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
               <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
@@ -472,35 +450,34 @@
           },
           choices: "NO_KEYS",
           trial_duration: 3000,
-          on_load: ()=>{
-            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
             task: 'reveal',
-            eeg_event_id: ()=>eeg_event_counter++,
+            eeg_event_id: () => eeg_event_counter++,
             card: 4,
-            color: ()=>jsPsych.timelineVariable('card4')(),
+            color: () => jsPsych.timelineVariable('card4')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
-            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
-            card_value: ()=>{
-              if(jsPsych.timelineVariable('card4')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card4')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
                 return 0;
               }
             },
-            wins_so_far: ()=>{
-              return jsPsych.data.get().filter({task: 'reveal'}).last(3).select('card_value').sum()
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(3).select('card_value').sum()
             }
           }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
               <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
               <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
@@ -513,26 +490,26 @@
           },
           choices: "NO_KEYS",
           trial_duration: 3000,
-          on_load: ()=>{
-            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
             task: 'reveal',
-            eeg_event_id: ()=>eeg_event_counter++,
+            eeg_event_id: () => eeg_event_counter++,
             card: 5,
-            color: ()=>jsPsych.timelineVariable('card5')(),
+            color: () => jsPsych.timelineVariable('card5')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
-            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
-            card_value: ()=>{
-              if(jsPsych.timelineVariable('card5')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card5')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
                 return 0;
               }
             },
-            wins_so_far: ()=>{
-              return jsPsych.data.get().filter({task: 'reveal'}).last(4).select('card_value').sum()
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(4).select('card_value').sum()
             }
           }
         }
@@ -576,7 +553,10 @@
         <br>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 100
+      post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
     };
 
     /* practice guided round instructions */
@@ -596,7 +576,10 @@
         <p>Please try to stay focused on the fixation cross in the center and reduce blinking during trials.</p>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 100
+      post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
     };
 
     /* practice guided round post-choice instruction */
@@ -614,14 +597,17 @@
         <br>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 100
+      post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
     };
 
     /* practice guided round card reveal */
     var practice_guided_card_reveal =
     {
       timeline: reveal_seq,
-      timeline_variables :[{card1: ()=>"red", card2: ()=>"red", card3: ()=>"red", card4: ()=>"black", card5: ()=>"black"}],
+      timeline_variables :[{card1: ()=>"red", card2: ()=>"red", card3: ()=>"black", card4: ()=>"red", card5: ()=>"black"}],
     };
 
     /* practice guided round end instructions */
@@ -654,7 +640,10 @@
           }
           return retHtml;
         },
-        post_trial_gap: 100
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
       };
 
       /* 2nd practice trial card reveal */
@@ -676,21 +665,24 @@
             retHtml =
               `
           <p>Well done!</p>
-          <br>
-          <p>You will now begin with the real trials.</p>
+          
           `;
           }
           else {
             retHtml =
               `
           <p>Whoops, better luck next time!</p>
-          <br>
-          <p>You will now begin with the real trials.</p>
+          
           `;
           }
+          retHtml += `<p>If you have any questions about the task, ask the experimenter now.</p>
+          <p>Once the experimenter gives you the OK, press any key to begin the real trials.</p>`
           return retHtml;
         },
-        post_trial_gap: 100
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
       };
 
       /* 2 practice trials */
@@ -758,6 +750,7 @@
         },
         choices: "NO_KEYS",
         trial_duration: 2000,
+        
       }
 
       var block_start = {
@@ -765,12 +758,15 @@
         stimulus: function () {
           var real_block_number = callBlock() + 1;
           var html = `
-        <p>Block: <strong>${real_block_number}</strong></p>
+        <p>Block ${real_block_number} of 5 is about to start.</p>
         `;
           return html;
         },
         choices: "NO_KEYS",
-        trial_duration: 2000
+        trial_duration: 2000,
+        simulation_options: {
+          simulate: false
+        }
       }
 
       var block_end = {
@@ -806,7 +802,6 @@
       for (let i = 0; i < 5; i++) {
         var test_proc = {
           timeline: [
-            trial_title,
             choice,
             show_choice,
             card_reveal,
