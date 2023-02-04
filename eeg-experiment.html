@@ -18,8 +18,8 @@
     p {color: white; font-size: 20px;}
     .RED {color: red; font-weight: bold;}
     .BLACK {color: black; font-weight: bold;}
-    .fixation {color: white; font-size: 60px; font-weight: bold;}
-    .choice_container div {width: 200px; height: 100px; font-size: 60px;}
+    .fixation {color: white; font-size: 60px; font-weight: bold; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+    .choice_container div {width: 200px; height: 60px; font-size: 60px; line-height: 1em;}
     .show_choice_container
     {
       position: absolute;
@@ -249,11 +249,11 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus:
       `
-        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+        <div class="choice_container" style="width: 600px; display: flex; justify-content: space-between; align-items: center;">
           <div class="RED" style="text-align: right;">RED</div>
-          <div class="fixation">+</div>
           <div class="BLACK" style="text-align: left;">BLACK</div>
         </div>
+        <div class="fixation">+</div>
       `,
       choices: ['ArrowLeft', 'ArrowRight'], //left -> red, right -> black
       data: {task: 'response', red: 'ArrowLeft'},
