@@ -2,18 +2,23 @@
 <html>
   <head>
     <title>Card Betting Task</title>
-    <script src=jspsych/jspsych.js></script>
-    <script src=jspsych/plugin-html-keyboard-response.js></script>
-    <script src=jspsych/plugin-image-keyboard-response.js></script>
-    <script src=jspsych/plugin-preload.js></script>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-image-keyboard-response.js"></script>
+    <script src="jspsych/plugin-preload.js"></script>
+    <script src="jspsych/plugin-survey-number.js"></script>
     <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css"/>
   </head>
 
   <style>
-    p {color: #5A5A5A; font-size: 20px;}
+    html, body {
+      background-color: #444;
+      color: white;
+    }
+    p {color: white; font-size: 20px;}
     .RED {color: red; font-weight: bold;}
     .BLACK {color: black; font-weight: bold;}
-    .fixation {color: #5A5A5A; font-size: 60px; font-weight: bold;}
+    .fixation {color: white; font-size: 60px; font-weight: bold;}
     .choice_container div {width: 200px; height: 100px; font-size: 60px;}
     .show_choice_container
     {
@@ -47,9 +52,9 @@
         top: 50%;
         width: 80px;
         height: 100px;
-        background: grey;
+        background: #888;
         border-radius: 10px;
-        border: 7px solid #5A5A5A;
+        border: 7px solid white;
     }
     .deg-0 {transform: translateY(-200px)}
     .deg-72 {transform: rotate(72deg) translateY(-150px) rotate(-72deg) translateY(-50px)}
@@ -67,6 +72,15 @@
         linear-gradient(135deg, grey 0%,grey 45%,white 45%,white 55%,grey 55%,grey 100%);
         border-radius: 10px;
         border: 7px solid #5A5A5A;
+    }
+    .eegtrigger {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      background-color: white;
+      color: white;
     }
   </style>
 
@@ -87,6 +101,7 @@
     var trial_number = 1; // initialize trial number
     var money = 10; // initialize the money won
     var block_number = 0; // block number
+    var subject_id = null; // subject id
 
     /* initialize color container 
     color[0] represent the color that participant bet on
@@ -310,7 +325,7 @@
           },
           choices: "NO_KEYS",
           trial_duration: 2000,
-          on_start: function(reveal_seq) {
+          on_load: function(reveal_seq) {
             var trig = jsPsych.timelineVariable('id');
             fetch(`http://127.0.0.1:8000/trigger/usb/${trig})`);
           }
@@ -327,11 +342,15 @@
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            <div class="eegtrigger"></div>`;
             return html;
           },
           choices: "NO_KEYS",
-          trial_duration: 3000
+          trial_duration: 3000,
+          on_load: ()=>{
+            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
@@ -345,11 +364,15 @@
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            <div class="eegtrigger"></div>`;
             return html;
           },
           choices: "NO_KEYS",
-          trial_duration: 3000
+          trial_duration: 3000,
+          on_load: ()=>{
+            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
@@ -363,11 +386,15 @@
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            <div class="eegtrigger"></div>`;
             return html;
           },
           choices: "NO_KEYS",
-          trial_duration: 3000
+          trial_duration: 3000,
+          on_load: ()=>{
+            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
@@ -381,11 +408,15 @@
               <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')()}"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            <div class="eegtrigger"></div>`;
             return html;
           },
           choices: "NO_KEYS",
-          trial_duration: 3000
+          trial_duration: 3000,
+          on_load: ()=>{
+            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
@@ -399,16 +430,32 @@
               <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')()}"></div>
               <div class ="card deg-288" style="background: ${jsPsych.timelineVariable('card5')()}"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            <div class="eegtrigger"></div>`;
             return html;
           },
           choices: "NO_KEYS",
-          trial_duration: 3000
+          trial_duration: 3000,
+          on_load: ()=>{
+            setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          }
         }
       ]
      
     // Welcome + practice trials ====================================================================================================
     
+    var subject_id_entry = {
+      type: jsPsychSurveyNumber,
+      questions: [
+        {prompt: "Please enter the participant's ID", name: "subject_id", required: true}
+      ],
+      on_finish: function(data){
+        let sid = parseInt(data.response.subject_id);
+        subject_id = sid >= 10 ? sid.toString() : "0" + sid; // sets the global variable
+        jsPsych.data.addProperties({subject_id: subject_id});
+      }
+    }
+
     /* welcome instructions */
     var welcome_instructions =
     {
@@ -676,23 +723,22 @@
     var debrief_block =
     {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: function() {
-        var trials = jsPsych.data.get().filter({task: 'response'}); // getting # of response trials
-        var correct_trials = trials.filter({correct: true}); // filtering for correct for # correct answers
-        var accuracy = Math.round(correct_trials.count() / trials.count() * 100); // proportion
-        var rt = Math.round(correct_trials.select('rt').mean()); // mean reaction time
-
-        return `<p>You responded correctly on ${accuracy}% of the trials.</p>
-      <p>Your average response time was ${rt}ms.</p>
-      <p>Press any key to complete the experiment. Thank you!</p>`;
+      stimulus: `
+        <p>Thank you for participating!</p>
+        <p>You are done. Please wait for the experimenter to come assist you.</p>`,
+      choices: "NO_KEYS",
+      on_load: function(){
+        jsPsych.data.get().localSave('json', `219_2023_behavioral_${subject_id}.json`);
       }
     };
 
     // Timeline push and run --------------------------------------------------------------------------------------------------------
+    TIMELINE.push(subject_id_entry);
     TIMELINE.push(welcome_instructions);
     TIMELINE.push(practice_procedure);
     TIMELINE.push(practice_procedure_2)
     TIMELINE.push(block_timeline);
+    TIMELINE.push(debrief_block);
 
     //timeline.push(debrief_block);
     jsPsych.run(TIMELINE); // run it all!
