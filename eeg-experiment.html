@@ -99,6 +99,7 @@
     /* declare global vars here */
     var TIMELINE = [];
     var trial_number = 1; // initialize trial number
+    var eeg_event_counter = 1; // initialize eeg event counter
     var money = 10; // initialize the money won
     var block_number = 0; // block number
     var subject_id = null; // subject id
@@ -256,7 +257,7 @@
         <div class="fixation">+</div>
       `,
       choices: ['ArrowLeft', 'ArrowRight'], //left -> red, right -> black
-      data: {task: 'response', red: 'ArrowLeft'},
+      data: {task: 'choice_response', red: 'ArrowLeft'},
       on_finish: function(data)
       {
         data.color = jsPsych.pluginAPI.compareKeys(data.response, data.red) ? 'red' : 'black';
@@ -352,6 +353,23 @@
           trial_duration: 3000,
           on_load: ()=>{
             setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          },
+          data: {
+            task: 'reveal',
+            eeg_event_id: ()=>eeg_event_counter++,
+            card: 1,
+            color: ()=>jsPsych.timelineVariable('card1')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
+            card_value: ()=>{
+              if(jsPsych.timelineVariable('card1')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: 0,
           }
         },
         {
@@ -374,6 +392,25 @@
           trial_duration: 3000,
           on_load: ()=>{
             setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          },
+          data: {
+            task: 'reveal',
+            eeg_event_id: ()=>eeg_event_counter++,
+            card: 2,
+            color: ()=>jsPsych.timelineVariable('card2')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
+            card_value: ()=>{
+              if(jsPsych.timelineVariable('card2')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: ()=>{
+              return jsPsych.data.get().filter({task:'reveal'}).last(1).select('card_value').sum()
+            }
           }
         },
         {
@@ -396,6 +433,25 @@
           trial_duration: 3000,
           on_load: ()=>{
             setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          },
+          data: {
+            task: 'reveal',
+            eeg_event_id: ()=>eeg_event_counter++,
+            card: 3,
+            color: ()=>jsPsych.timelineVariable('card3')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
+            card_value: ()=>{
+              if(jsPsych.timelineVariable('card3')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: ()=>{
+              return jsPsych.data.get().filter({task: 'reveal'}).last(2).select('card_value').sum()
+            }
           }
         },
         {
@@ -418,6 +474,25 @@
           trial_duration: 3000,
           on_load: ()=>{
             setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          },
+          data: {
+            task: 'reveal',
+            eeg_event_id: ()=>eeg_event_counter++,
+            card: 4,
+            color: ()=>jsPsych.timelineVariable('card4')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
+            card_value: ()=>{
+              if(jsPsych.timelineVariable('card4')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: ()=>{
+              return jsPsych.data.get().filter({task: 'reveal'}).last(3).select('card_value').sum()
+            }
           }
         },
         {
@@ -440,6 +515,25 @@
           trial_duration: 3000,
           on_load: ()=>{
             setTimeout(()=>document.querySelector('.eegtrigger').style.display="none", 250)
+          },
+          data: {
+            task: 'reveal',
+            eeg_event_id: ()=>eeg_event_counter++,
+            card: 5,
+            color: ()=>jsPsych.timelineVariable('card5')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: ()=>jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color,
+            card_value: ()=>{
+              if(jsPsych.timelineVariable('card5')() == jsPsych.data.get().filter({task: 'choice_response'}).last(1).values()[0].color){
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: ()=>{
+              return jsPsych.data.get().filter({task: 'reveal'}).last(4).select('card_value').sum()
+            }
           }
         }
       ]
@@ -455,6 +549,9 @@
         let sid = parseInt(data.response.subject_id);
         subject_id = sid >= 10 ? sid.toString() : "0" + sid; // sets the global variable
         jsPsych.data.addProperties({subject_id: subject_id});
+      },
+      simulation_options: {
+        simulate: false
       }
     }
 
@@ -528,223 +625,227 @@
     };
 
     /* practice guided round end instructions */
-    var practice_guided_end_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
+      var practice_guided_end_instructions =
       {
-        var practiceResponse0 = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
-        var retHtml;
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var practiceResponse0 = jsPsych.data.get().filter({ task: 'response' }).last(1).select('color').values[0];
+          var retHtml;
 
-        if (practiceResponse0 == 'red')
-        {
-          retHtml =
-          `
+          if (practiceResponse0 == 'red') {
+            retHtml =
+              `
           <p>Well done!</p>
           <br>
           <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
           <br>
           <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
           `;
-        }
-        else
-        {
-          retHtml =
-          `
+          }
+          else {
+            retHtml =
+              `
           <p>Whoops, better luck next time!</p>
           <br>
           <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
           <br>
           <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
           `;
-        }
-        return retHtml;
-      },
-      post_trial_gap: 100
-    };
+          }
+          return retHtml;
+        },
+        post_trial_gap: 100
+      };
 
-            /* 2nd practice trial card reveal */
-            var practice_2_card_reveal =
-    {
-      timeline: reveal_seq,
-      timeline_variables :[{card1: ()=>"black", card2: ()=>"black", card3: ()=>"red", card4: ()=>"red", card5: ()=>"black"}],
-    };
+      /* 2nd practice trial card reveal */
+      var practice_2_card_reveal =
+      {
+        timeline: reveal_seq,
+        timeline_variables: [{ card1: () => "black", card2: () => "black", card3: () => "red", card4: () => "red", card5: () => "black" }],
+      };
 
       /* practice trial 2 end instructions */
       var practice_2_end_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
       {
-        var practiceResponse0 = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
-        var retHtml;
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var practiceResponse0 = jsPsych.data.get().filter({ task: 'response' }).last(1).select('color').values[0];
+          var retHtml;
 
-        if (practiceResponse0 == 'black')
-        {
-          retHtml =
-          `
+          if (practiceResponse0 == 'black') {
+            retHtml =
+              `
           <p>Well done!</p>
           <br>
           <p>You will now begin with the real trials.</p>
           `;
-        }
-        else
-        {
-          retHtml =
-          `
+          }
+          else {
+            retHtml =
+              `
           <p>Whoops, better luck next time!</p>
           <br>
           <p>You will now begin with the real trials.</p>
           `;
+          }
+          return retHtml;
+        },
+        post_trial_gap: 100
+      };
+
+      /* 2 practice trials */
+      var practice_procedure =
+      {
+        timeline:
+          [
+            practice_guided_instructions,
+            choice,
+            show_choice,
+            practice_guided_post_choice_instructions,
+            practice_guided_card_reveal,
+            practice_guided_end_instructions,
+          ],
+        data: {
+          phase: 'practice-1'
         }
-        return retHtml;
-      },
-      post_trial_gap: 100
-    };
+      }
 
-    /* 2 practice trials */
-    var practice_procedure =
-    {
-      timeline:
-      [
-        practice_guided_instructions,
-        choice,
-        show_choice,
-        practice_guided_post_choice_instructions,
-        practice_guided_card_reveal,
-        practice_guided_end_instructions,
-      ]
-    }
+      var practice_procedure_2 =
+      {
+        timeline:
+          [
+            choice,
+            show_choice,
+            practice_2_card_reveal,
+            practice_2_end_instructions,
+          ],
+        data: {
+          phase: 'practice-2'
+        }
+      }
 
-    var practice_procedure_2 = 
-    {
-      timeline:
-      [
-        choice,
-        show_choice,
-        practice_2_card_reveal,
-        practice_2_end_instructions,
-      ]
-    }
+      //  test trials blocks ==========================================================================================================
 
-    //  test trials blocks ==========================================================================================================
-    
-    /* card reveal sequence */
-    var card_reveal =
-    {
-      timeline: reveal_seq
-    };
+      /* card reveal sequence */
+      var card_reveal =
+      {
+        timeline: reveal_seq
+      };
 
-    /* result page */
-    /** can not update money and trial_number **/
-    var result_page = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function(){
-        trial_number++;
-        if (jsPsych.timelineVariable('result') == 0){
-          money += 0.2;
-          return `
+      /* result page */
+      /** can not update money and trial_number **/
+      var result_page = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          trial_number++;
+          if (jsPsych.timelineVariable('result') == 0) {
+            money += 0.2;
+            return `
           <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
             <div class="trial" style="text-align: center;">
               <p>You won 20 cents!</p>
             </div>
           </div>`
-        }
-        if (jsPsych.timelineVariable('result') == 1){
-          return `
+          }
+          if (jsPsych.timelineVariable('result') == 1) {
+            return `
           <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
             <div class="trial" style="text-align: center;">
               <p>You didn't win this round.</p></div>
             </div>
           </div>`
-        };
-      },
-      choices: "NO_KEYS",
-      trial_duration: 2000,
-    }
+          };
+        },
+        choices: "NO_KEYS",
+        trial_duration: 2000,
+      }
 
-    var block_start = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function(){
-        var real_block_number = callBlock() + 1;
-        var html = `
+      var block_start = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var real_block_number = callBlock() + 1;
+          var html = `
         <p>Block: <strong>${real_block_number}</strong></p>
         `;
-        return html;
-      },
-      choices: "NO_KEYS",
-      trial_duration: 2000
-    }
+          return html;
+        },
+        choices: "NO_KEYS",
+        trial_duration: 2000
+      }
 
-    var block_end = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function(){
-        var round_money = roundTo(callMoney(), 2);
-        var real_block_number = callBlock() + 1;
-        var html = `
+      var block_end = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var round_money = roundTo(callMoney(), 2);
+          var real_block_number = callBlock() + 1;
+          var html = `
         <p>Block ${real_block_number} of 5 complete!</p>
-        <p>Including the $10 you started with, you've won a total of <strong>${round_money}</strong>.</p>        `
-        return html;
-      },
+        <p>Including the $10 you started with, you've won a total of $<strong>${round_money.toFixed(2)}</strong>.</p>
+        <p>Press any key to continue to the next block.</p>        `
+          return html;
+        },
 
-      on_finish: function(){
-        block_number ++; 
-      },
+        on_finish: function () {
+          block_number++;
+        },
 
-      simulation_options: {
-        simulate: false
+        simulation_options: {
+          simulate: false
+        }
+
       }
 
-    }
-
-    var block_timeline = {
-      timeline: []
-    }
-
-    /* test run timeline */
-    for(let i = 0; i < 5; i++){
-      var test_proc = {
-        timeline: [
-          trial_title,
-          choice,
-          show_choice,
-          card_reveal,
-          result_page,
-        ],
-        timeline_variables: final_outcome[i],
+      var block_timeline = {
+        timeline: [],
+        data: {
+          phase: 'test'
+        }
       }
-      block_timeline.timeline.push(block_start);
-      block_timeline.timeline.push(test_proc);
-      block_timeline.timeline.push(block_end);
-    }
 
-    // Block timeline ========================================================================================================
-    
-    // [TUT CODE] to show at end of trials. gives info on how participant did.
-    var debrief_block =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: `
+      /* test run timeline */
+      for (let i = 0; i < 5; i++) {
+        var test_proc = {
+          timeline: [
+            trial_title,
+            choice,
+            show_choice,
+            card_reveal,
+            result_page,
+          ],
+          timeline_variables: final_outcome[i],
+        }
+        block_timeline.timeline.push(block_start);
+        block_timeline.timeline.push(test_proc);
+        block_timeline.timeline.push(block_end);
+      }
+
+      // Block timeline ========================================================================================================
+
+      // [TUT CODE] to show at end of trials. gives info on how participant did.
+      var debrief_block =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
         <p>Thank you for participating!</p>
         <p>You are done. Please wait for the experimenter to come assist you.</p>`,
-      choices: "NO_KEYS",
-      on_load: function(){
-        jsPsych.data.get().localSave('json', `219_2023_behavioral_${subject_id}.json`);
-      },
-      simulation_options: {
-        simulate: false
-      }
-    };
+        choices: "NO_KEYS",
+        on_start: function () {
+          jsPsych.data.get().localSave('json', `219_2023_behavioral_${subject_id}.json`);
+        },
+        simulation_options: {
+          simulate: false
+        }
+      };
 
-    // Timeline push and run --------------------------------------------------------------------------------------------------------
-    TIMELINE.push(subject_id_entry);
-    TIMELINE.push(welcome_instructions);
-    TIMELINE.push(practice_procedure);
-    TIMELINE.push(practice_procedure_2)
-    TIMELINE.push(block_timeline);
-    TIMELINE.push(debrief_block);
+      // Timeline push and run --------------------------------------------------------------------------------------------------------
+      TIMELINE.push(subject_id_entry);
+      TIMELINE.push(welcome_instructions);
+      TIMELINE.push(practice_procedure);
+      TIMELINE.push(practice_procedure_2)
+      TIMELINE.push(block_timeline);
+      TIMELINE.push(debrief_block);
 
-    //timeline.push(debrief_block);
-    jsPsych.run(TIMELINE); // run it all!
+      //timeline.push(debrief_block);
+      jsPsych.simulate(TIMELINE); // run it all!
   </script>
 </html>
