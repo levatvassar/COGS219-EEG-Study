@@ -646,16 +646,16 @@
           return `
           <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
             <div class="trial" style="text-align: center;">
-              <p>Won 20 cents!</p></div>
-              <p>Your total winnings were $${money}. </p> 
+              <p>You won 20 cents!</p>
+            </div>
           </div>`
         }
         if (jsPsych.timelineVariable('result') == 1){
           return `
           <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
             <div class="trial" style="text-align: center;">
-              <p>Lost this Round.</p></div>
-              <p>Your total winnings were $${money}. </p>
+              <p>You didn't win this round.</p></div>
+            </div>
           </div>`
         };
       },
@@ -682,9 +682,8 @@
         var round_money = roundTo(callMoney(), 2);
         var real_block_number = callBlock() + 1;
         var html = `
-        <p>Block <strong>${real_block_number}</strong> ended</p>
-        <br>
-        <p>You won <strong>${round_money}.</p>        `
+        <p>Block ${real_block_number} of 5 complete!</p>
+        <p>Including the $10 you started with, you've won a total of <strong>${round_money}</strong>.</p>        `
         return html;
       },
 
@@ -731,6 +730,9 @@
       choices: "NO_KEYS",
       on_load: function(){
         jsPsych.data.get().localSave('json', `219_2023_behavioral_${subject_id}.json`);
+      },
+      simulation_options: {
+        simulate: false
       }
     };
 
