@@ -134,7 +134,7 @@
           stimulus: function () {
             var html =
               `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" ${jsPsych.timelineVariable('catch_n') == 1 ? "" : `style="background: ${jsPsych.timelineVariable('card1')()}"`}></div>
               <div class ="card deg-72" style="background: grey"></div>
               <div class ="card deg-144" style="background: grey"></div>
               <div class ="card deg-216" style="background: grey"></div>
@@ -153,7 +153,7 @@
           },
           data: {
             task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
-            eeg_event_id: () => eeg_event_counter++,
+            eeg_event_id: () => jsPsych.timelineVariable("catch") ? null : eeg_event_counter++,
             card: 1,
             color: () => jsPsych.timelineVariable('card1')(),
             sequence_id: jsPsych.timelineVariable('id'),
@@ -174,8 +174,8 @@
           stimulus: function () {
             var html =
               `<div class ="card_deck">
-              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" ${jsPsych.timelineVariable('catch_n') == 1 ? "" : `style="background: ${jsPsych.timelineVariable('card1')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" ${jsPsych.timelineVariable('catch_n') == 2 ? "" : `style="background: ${jsPsych.timelineVariable('card2')()}"`}></div>
               <div class ="card deg-144" style="background: grey"></div>
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
@@ -216,9 +216,9 @@
           stimulus: function () {
             var html =
               `<div class ="card_deck">
-              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" style="background: ${jsPsych.timelineVariable('catch_n') == 3 ? "grey" : jsPsych.timelineVariable('card3')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" ${jsPsych.timelineVariable('catch_n') == 1 ? "" : `style="background: ${jsPsych.timelineVariable('card1')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" ${jsPsych.timelineVariable('catch_n') == 2 ? "" : `style="background: ${jsPsych.timelineVariable('card2')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" ${jsPsych.timelineVariable('catch_n') == 3 ? "" : `style="background: ${jsPsych.timelineVariable('card3')()}"`}></div>
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
@@ -258,10 +258,10 @@
           stimulus: function () {
             var html =
               `<div class ="card_deck">
-              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" style="background: ${jsPsych.timelineVariable('catch_n') == 3 ? "grey" : jsPsych.timelineVariable('card3')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 4 ? "catch_card" : "card"} deg-216" style="background: ${jsPsych.timelineVariable('catch_n') == 4 ? "grey" : jsPsych.timelineVariable('card4')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" ${jsPsych.timelineVariable('catch_n') == 1 ? "" : `style="background: ${jsPsych.timelineVariable('card1')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" ${jsPsych.timelineVariable('catch_n') == 2 ? "" : `style="background: ${jsPsych.timelineVariable('card2')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" ${jsPsych.timelineVariable('catch_n') == 3 ? "" : `style="background: ${jsPsych.timelineVariable('card3')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 4 ? "catch_card" : "card"} deg-216" ${jsPsych.timelineVariable('catch_n') == 4 ? "" : `style="background: ${jsPsych.timelineVariable('card4')()}"`}></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
             <div class="fixation">+</div>
@@ -300,11 +300,11 @@
           stimulus: function () {
             var html =
               `<div class ="card_deck">
-              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" style="background: ${jsPsych.timelineVariable('catch_n') == 3 ? "grey" : jsPsych.timelineVariable('card3')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 4 ? "catch_card" : "card"} deg-216" style="background: ${jsPsych.timelineVariable('catch_n') == 4 ? "grey" : jsPsych.timelineVariable('card4')()}"></div>
-              <div class ="${jsPsych.timelineVariable('catch_n') == 5 ? "catch_card" : "card"} deg-288" style="background: ${jsPsych.timelineVariable('catch_n') == 5 ? "grey" : jsPsych.timelineVariable('card5')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" ${jsPsych.timelineVariable('catch_n') == 1 ? "" : `style="background: ${jsPsych.timelineVariable('card1')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" ${jsPsych.timelineVariable('catch_n') == 2 ? "" : `style="background: ${jsPsych.timelineVariable('card2')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" ${jsPsych.timelineVariable('catch_n') == 3 ? "" : `style="background: ${jsPsych.timelineVariable('card3')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 4 ? "catch_card" : "card"} deg-216" ${jsPsych.timelineVariable('catch_n') == 4 ? "" : `style="background: ${jsPsych.timelineVariable('card4')()}"`}></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 5 ? "catch_card" : "card"} deg-288" ${jsPsych.timelineVariable('catch_n') == 5 ? "" : `style="background: ${jsPsych.timelineVariable('card5')()}"`}></div>
             </div>
             <div class="fixation">+</div>
             ${jsPsych.timelineVariable('catch') ? "": '<div class="eegtrigger"></div>'}`;
@@ -566,7 +566,8 @@
           }
           if (jsPsych.timelineVariable('result') == null) {
             var which_card = jsPsych.timelineVariable("catch_n");
-            var attention_check_correct = jsPsych.data.get().filter({ task: 'catch', card: which_card }).last(1).select('rt').values[0] <= 1500;
+            var rt = jsPsych.data.get().filter({ task: 'catch', card: which_card }).last(1).select('rt').values[0];
+            var attention_check_correct = rt !== null && rt <= 1500;
 
             if(attention_check_correct) {
               return `<p>Good job! You responded quickly to the attention check.</p>`;
