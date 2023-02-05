@@ -512,6 +512,48 @@
         }
       };
 
+      /* catch trial practice card reveal */ // TO DO: make this do a catch trial
+      var catch_practice_card_reveal =
+      {
+        timeline: reveal_seq,
+        // timeline_variables: [{ card1: () => "black", card2: () => "black", card3: () => "red", card4: () => "red", card5: () => "black" }],
+        timeline_variables: [createCatch(2)],
+      };
+
+      /* catch trial end instructions */  // NOTE: THESE STILL NEED TO BE MODIFIED
+      var catch_practice_end_instructions =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var practiceResponse0 = jsPsych.data.get().filter({ task: 'choice_response' }).last(1).select('color').values[0];
+          var retHtml;
+
+          if (practiceResponse0 == 'black') {
+            retHtml =
+              `
+          <p>Well done!</p>
+
+          `;
+          }
+          else {
+            retHtml =
+              `
+          <p>Whoops, better luck next time!</p>
+
+          `;
+          }
+          retHtml += `<p>If you have any questions about the task, ask the experimenter now.</p>
+          <p>Once the experimenter gives you the OK, press any key to begin the real trials.</p>`
+          return retHtml;
+        },
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
+      };
+
+
+
       /* 2 practice trials */
       var practice_procedure =
       {
@@ -541,6 +583,17 @@
         data: {
           phase: 'practice-2'
         }
+      }
+
+      // attention check practice trial
+      var catch_practice =
+      {
+        timeline:
+          [
+              catch_practice_instructions,
+              catch_practice_card_reveal,
+              catch_practice_end_instructions
+          ]
       }
 
       //  test trials blocks ==========================================================================================================
@@ -664,7 +717,8 @@
       // TIMELINE.push(subject_id_entry);
       // TIMELINE.push(welcome_instructions);
       // TIMELINE.push(practice_procedure);
-      // TIMELINE.push(practice_procedure_2)
+      // TIMELINE.push(practice_procedure_2);
+      // TIMELINE.push(catch_practice);
       TIMELINE.push(block_timeline);
       TIMELINE.push(debrief_block);
 
