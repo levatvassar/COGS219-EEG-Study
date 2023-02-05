@@ -126,7 +126,7 @@
           trial_duration: 2000,
           on_load: function (reveal_seq) {
             var trig = jsPsych.timelineVariable('id');
-            fetch(`http://127.0.0.1:8000/trigger/usb/${trig})`);
+            fetch(`http://127.0.0.1:8000/trigger/usb/${trig}`);
           }
         },
         {
