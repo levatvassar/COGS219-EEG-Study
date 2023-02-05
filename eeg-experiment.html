@@ -2,314 +2,116 @@
 <html>
   <head>
     <title>Card Betting Task</title>
-    <script src=jspsych/jspsych.js></script>
-    <script src=jspsych/plugin-html-keyboard-response.js></script>
-    <script src=jspsych/plugin-image-keyboard-response.js></script>
-    <script src=jspsych/plugin-preload.js></script>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-image-keyboard-response.js"></script>
+    <script src="jspsych/plugin-preload.js"></script>
+    <script src="jspsych/plugin-survey-number.js"></script>
+    <script src="js/create-trials.js"></script>
     <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css"/>
+    <link href="styles.css" rel="stylesheet" type="text/css"/>
   </head>
-
-  <style>
-    p {color: #5A5A5A; font-size: 20px;}
-    .RED {color: red; font-weight: bold;}
-    .BLACK {color: black; font-weight: bold;}
-    .fixation {color: #5A5A5A; font-size: 60px; font-weight: bold;}
-    .choice_container div {width: 200px; height: 100px; font-size: 60px;}
-    .show_choice_container
-    {
-      position: absolute;
-      display: flex;
-      top: 50%;
-      left: 50%;
-      margin-top: -75px;
-      margin-left: -200px;
-      justify-content: center;
-      width: 400px;
-      height: 150px;
-    }
-    .card_deck
-    {
-        margin: 0;
-        position: fixed;
-        display: flex;
-        justify-content: center;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        width: 400px;
-        height: 400px;
-        border-radius: 100%;
-    }
-    .card
-    {
-        position: absolute;
-        top: 50%;
-        width: 80px;
-        height: 100px;
-        background: grey;
-        border-radius: 10px;
-        border: 7px solid #5A5A5A;
-    }
-    .deg-0 {transform: translateY(-200px)}
-    .deg-72 {transform: rotate(72deg) translateY(-150px) rotate(-72deg) translateY(-50px)}
-    .deg-144 {transform: rotate(144deg) translateY(-150px) rotate(-144deg) translateY(-50px)}
-    .deg-216 {transform: rotate(216deg) translateY(-150px) rotate(-216deg) translateY(-50px)}
-    .deg-288 {transform: rotate(288deg) translateY(-150px) rotate(-288deg) translateY(-50px)}
-    .catch_card 
-    {
-        position: absolute;
-        top: 50%;
-        width: 80px;
-        height: 100px;
-        background: 
-        linear-gradient(45deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 45%,white 45%,white 55%,rgba(0,0,0,0) 55%,rgba(0,0,0,0) 100%),
-        linear-gradient(135deg, grey 0%,grey 45%,white 45%,white 55%,grey 55%,grey 100%);
-        border-radius: 10px;
-        border: 7px solid #5A5A5A;
-    }
-  </style>
 
   <body></body>
 
   <script>
     // Set up ======================================================================================================================
-  
-    /* initiate jsPsych trial */
-    var jsPsych = initJsPsych
-    ({
-      on_finish: function()
-      {jsPsych.data.displayData();}
-    });
 
-    /* declare global vars here */
-    var TIMELINE = [];
-    var trial_number = 1; // initialize trial number
-    var money = 10; // initialize the money won
-    var block_number = 0; // block number
+      /* initiate jsPsych trial */
+      var jsPsych = initJsPsych();
 
-    /* initialize color container 
-    color[0] represent the color that participant bet on
-    color[1] represent the other color */
-    var color = [2];
-    
-    /* 16 card combinations */
-    /**logic: 
-     * the winning card combination listed all the possible outcome when the card that participants
-     * picked (color[0]) is more than the color they did not pick (color[1]).
-     * the losing card combination listed all the possible outcome when the card that participants
-     * picked (color[0]) is less than the color they did not pick (color[1]).
-     * 
-     * 0 represent win result.
-     * 1 represent lose result.
-    */
-    const win_card_comb =
-    [
-      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 1, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 2, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 3, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 0, id: 4, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 0, id: 5, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 0, id: 6, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 7, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 0, id: 8, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 0, id: 9, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 0, id: 10, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 0, id: 11, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 0, id: 12, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 0, id: 13, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 0, id: 14, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 0, id: 15, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 0, id: 16, catch: false, catch_n: 0 },
-    ]
+      /* declare global vars here */
+      var TIMELINE = [];
+      var trial_number = 1; // initialize trial number
+      var eeg_event_counter = 1; // initialize eeg event counter
+      var money = 10; // initialize the money won
+      var block_number = 0; // block number
+      var subject_id = null; // subject id
 
-    const lose_card_comb =
-    [
-      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 17, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 18, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 19, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 1, id: 20, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 1, id: 21, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 1, id: 22, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 23, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 1, id: 24, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 1, id: 25, catch: false, catch_n: 0 },
-      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 1, id: 26, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 1, id: 27, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 1, id: 28, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 1, id: 29, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 1, id: 30, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 1, id: 31, catch: false, catch_n: 0 },
-      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 1, id: 32, catch: false, catch_n: 0 },
-    ]
+      /* initialize color container 
+      color[0] represent the color that participant picked
+      color[1] represent the other color */
+      var color = [];
 
-    var all80trials = shuffleOutcome(); // array of arrays of all the card results 
-    var pre_catch_outcome = [];
-    pre_catch_outcome[0] = all80trials.slice(0, 16);
-    pre_catch_outcome[1] = all80trials.slice(16, 32);
-    pre_catch_outcome[2] = all80trials.slice(32, 48);
-    pre_catch_outcome[3] = all80trials.slice(48, 64);
-    pre_catch_outcome[4] = all80trials.slice(64, 80);
-    var final_outcome = insert_catch_trial(pre_catch_outcome);
+      /* create trial set */
+      var final_outcome = createStimulusSet(jsPsych);
 
+      // functions ====================================================================================================================
 
-    // functions ====================================================================================================================
-    
-    /* generate random card sequence */
-    /*function cardColorSeqGen()
-    {
-      var colorArr = [5];
-
-      for (var i=0; i<5; i++)
-      {colorArr[i] = Math.round(Math.random());}
-
-      return colorArr;
-    };*/
-    
-     /** create a shuffled array that contain the outcome info of all 80 trials,
-     * each time it will generate an equal number of win and lose trials for each of the 16 card combination sequence
-     * 16 card combs will appear twice in each of the 40 win or lose trials,
-     * the first 8 card combs will appear one more time (not sure if we want to randomize this part)
-     **/
-    function makeItForty(comb) {  // helper function: duplicate the array and append the first half of the array to the resulting array
-      const comb_clone = comb.map(object => ({ ...object })) // not sure how this one works, but before I was encountering problems when try to assign catch trials to card combination. Since the copy I made before only copy the reference and not the actual objects, it will assign catch trials to all the copies in the final outcome
-      var comb_copy = comb.concat(comb_clone);
-      var half_clone = [comb[4], comb[12], comb[7], comb[2], comb[13], comb[9], comb[1], comb[15]];
-      const half = half_clone.map(object => ({ ...object })) // as as before
-      var forty_array = comb_copy.concat(half);
-
-    return forty_array
-    }
-
-    function shuffleOutcome(){ // create and shuffle card outcomes
-      var outcome = [];
-      var all_wcard_comb = makeItForty(win_card_comb);
-      var all_lcard_comb = makeItForty(lose_card_comb);
-
-      outcome = all_wcard_comb.concat(all_lcard_comb);
-
-      // shuffle the determined outcomes
-      var shuffled_outcome = jsPsych.randomization.shuffle(outcome); 
-      return shuffled_outcome;
-    }
-
-    function insert_catch_trial(arrarr) { // assign catch trials to each block
-      for (let i = 0; i < 5; i++) {
-        let n = Math.floor(Math.random() * 16) // randomly assign a catch trial in n of the 16 trials in a block
-        arrarr[i][n].catch = true;
-        arrarr[i][n].catch_n = (Math.floor(Math.random() * 5) + 1) // randomly assign the placement of the catch trial in a card reveal sequence; 1-5
+      function roundTo(n, place) {
+        return +(Math.round(n + "e+" + place) + "e-" + place);
       }
-    return arrarr;
-    }
-    
-    
-    /* Dynamic parameters helper function */
-    function callTrial (){ // call trial number 
-      return trial_number;
-    }
-    
-    function callMoney() { // call money
-      return money;
-    }
 
-    function callBlock() {
-      return block_number;
-    }
-    
-    function roundTo(n, place) {    
-      return +(Math.round(n + "e+" + place) + "e-" + place);
-    }
-    
-    // Reusable trial blocks ========================================================================================================
-    
-    /* trial title card */
-    var trial_title =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
+      // Reusable trial blocks ========================================================================================================
+
+      /* choice trial */
+      var choice =
       {
-        var html = `
-        <p>Trial: <strong>${callTrial()}</strong></p>
-        <br>
-        <p>Place your bet on the next slide.</p>
-        `;
-        return html;
-      },
-      choices: "NO_KEYS",
-      trial_duration: 3000
-    }
-
-    /* choice trial */
-    var choice =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
-        <div class="choice_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+          `
+        <div class="choice_container" style="width: 600px; display: flex; justify-content: space-between; align-items: center;">
           <div class="RED" style="text-align: right;">RED</div>
-          <div class="fixation">+</div>
           <div class="BLACK" style="text-align: left;">BLACK</div>
         </div>
+        <div class="fixation">+</div>
       `,
-      choices: ['ArrowLeft', 'ArrowRight'], //left -> red, right -> black
-      data: {task: 'response', red: 'ArrowLeft'},
-      on_finish: function(data)
-      {
-        data.color = jsPsych.pluginAPI.compareKeys(data.response, data.red) ? 'red' : 'black';
-        if (data.color == 'red'){
-          color[0] = 'red';
-          color[1] = 'black';
-        }
-        else {
-          color[0] = 'black';
-          color[1] = 'red';
+        choices: ['ArrowLeft', 'ArrowRight'], //left -> red, right -> black
+        data: { task: 'choice_response', red: 'ArrowLeft' },
+        on_finish: function (data) {
+          data.color = jsPsych.pluginAPI.compareKeys(data.response, data.red) ? 'red' : 'black';
+          if (data.color == 'red') {
+            color[0] = 'red';
+            color[1] = 'black';
+          }
+          else {
+            color[0] = 'black';
+            color[1] = 'red';
+          }
         }
       }
-    }
-    
-    /* show choice trial */
-    var show_choice =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
-      {
-        var color = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
-        console.log(color);
-        var retHtml;
 
-        if (color == 'red')
-        {
-          retHtml = `
-          <div class="show_choice_container">
-          <p>Chosen option: <span class="RED">RED</span></p>
-          <div class="card" style="background: red;"></div>
-          </div>
-          `;
-        }
-        else
-        {
-          retHtml = `
-          <div class="show_choice_container">
-          <p>Chosen option: <span class="BLACK">BLACK</span></p>
-          <div class="card" style="background: black;"></div>
-          </div>
-          `;
-        }
-
-        return retHtml;
-      },
-      choices: "NO_KEYS",
-      trial_duration: 2000
-    }
-    
-    /* card reveal sequence */
-    var reveal_seq = [
+      /* show choice trial */
+      var show_choice =
       {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var color = jsPsych.data.get().filter({ task: 'choice_response' }).last(1).select('color').values[0];
+          console.log(color);
+          var retHtml;
+
+          if (color == 'red') {
+            retHtml = `
+          <div class="show_choice_container">
+            <div class="card deg-0" style="background: red;"></div>
+            <p style="margin:0;">Chosen option: <span class="RED">RED</span></p>
+          </div>
+          <div class="fixation">+</div>
+          `;
+          }
+          else {
+            retHtml = `
+          <div class="show_choice_container">
+            <div class="card deg-0" style="background: black;"></div>
+            <p style="margin:0;">Chosen option: <span class="BLACK">BLACK</span></p>
+          </div>
+          <div class="fixation">+</div>
+          `;
+          }
+
+          return retHtml;
+        },
+        choices: "NO_KEYS",
+        trial_duration: 2000
+      }
+
+      /* card reveal sequence */
+      var reveal_seq = [
+        {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
               <div class ="card deg-0" style="background: grey"></div>
               <div class ="card deg-72" style="background: grey"></div>
               <div class ="card deg-144" style="background: grey"></div>
@@ -317,207 +119,247 @@
               <div class ="card deg-288" style="background: grey"></div>
             </div>
             <div class="fixation">+</div>`;
-          return html;
+            return html;
           },
           choices: "NO_KEYS",
+          response_ends_trial: false,
           trial_duration: 2000,
-          on_start: function(reveal_seq) {
+          on_load: function (reveal_seq) {
             var trig = jsPsych.timelineVariable('id');
             fetch(`http://127.0.0.1:8000/trigger/usb/${trig})`);
           }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
               <div class ="card deg-72" style="background: grey"></div>
               <div class ="card deg-144" style="background: grey"></div>
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            ${jsPsych.timelineVariable('catch') ? "": '<div class="eegtrigger"></div>'}`;
             return html;
           },
-          choices: "NO_KEYS",
-          trial_duration: 3000
+          choices: "ALL_KEYS",
+          response_ends_trial: false,
+          trial_duration: 3000,
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
+          },
+          data: {
+            task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
+            eeg_event_id: () => eeg_event_counter++,
+            card: 1,
+            color: () => jsPsych.timelineVariable('card1')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card1')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: 0,
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
               <div class ="card deg-144" style="background: grey"></div>
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            ${jsPsych.timelineVariable('catch') ? "": '<div class="eegtrigger"></div>'}`;
             return html;
           },
-          choices: "NO_KEYS",
-          trial_duration: 3000
+          choices: "ALL_KEYS",
+          response_ends_trial: false,
+          trial_duration: 3000,
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
+          },
+          data: {
+            task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
+            eeg_event_id: () => eeg_event_counter++,
+            card: 2,
+            color: () => jsPsych.timelineVariable('card2')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card2')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(1).select('card_value').sum()
+            }
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus:function()
-          {
-            var html = 
-            `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" style="background: ${jsPsych.timelineVariable('catch_n') == 3 ? "grey" : jsPsych.timelineVariable('card3')()}"></div>
               <div class ="card deg-216" style="background: grey"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            ${jsPsych.timelineVariable('catch') ? "": '<div class="eegtrigger"></div>'}`;
             return html;
           },
-          choices: "NO_KEYS",
-          trial_duration: 3000
+          choices: "ALL_KEYS",
+          response_ends_trial: false,
+          trial_duration: 3000,
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
+          },
+          data: {
+            task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
+            eeg_event_id: () => eeg_event_counter++,
+            card: 3,
+            color: () => jsPsych.timelineVariable('card3')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card3')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(2).select('card_value').sum()
+            }
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
-              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')()}"></div>
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" style="background: ${jsPsych.timelineVariable('catch_n') == 3 ? "grey" : jsPsych.timelineVariable('card3')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 4 ? "catch_card" : "card"} deg-216" style="background: ${jsPsych.timelineVariable('catch_n') == 4 ? "grey" : jsPsych.timelineVariable('card4')()}"></div>
               <div class ="card deg-288" style="background: grey"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            ${jsPsych.timelineVariable('catch') ? "": '<div class="eegtrigger"></div>'}`;
             return html;
           },
-          choices: "NO_KEYS",
-          trial_duration: 3000
+          choices: "ALL_KEYS",
+          response_ends_trial: false,
+          trial_duration: 3000,
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
+          },
+          data: {
+            task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
+            eeg_event_id: () => eeg_event_counter++,
+            card: 4,
+            color: () => jsPsych.timelineVariable('card4')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if (jsPsych.timelineVariable('card4')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: () => {
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(3).select('card_value').sum()
+            }
+          }
         },
         {
           type: jsPsychHtmlKeyboardResponse,
-          stimulus: function()
-          {
-            var html = 
-            `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
-              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')()}"></div>
-              <div class ="card deg-288" style="background: ${jsPsych.timelineVariable('card5')()}"></div>
+          stimulus: function () {
+            var html =
+              `<div class ="card_deck">
+              <div class ="${jsPsych.timelineVariable('catch_n') == 1 ? "catch_card" : "card"} deg-0" style="background: ${jsPsych.timelineVariable('catch_n') == 1 ? "grey" : jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 2 ? "catch_card" : "card"} deg-72" style="background: ${jsPsych.timelineVariable('catch_n') == 2 ? "grey" : jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 3 ? "catch_card" : "card"} deg-144" style="background: ${jsPsych.timelineVariable('catch_n') == 3 ? "grey" : jsPsych.timelineVariable('card3')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 4 ? "catch_card" : "card"} deg-216" style="background: ${jsPsych.timelineVariable('catch_n') == 4 ? "grey" : jsPsych.timelineVariable('card4')()}"></div>
+              <div class ="${jsPsych.timelineVariable('catch_n') == 5 ? "catch_card" : "card"} deg-288" style="background: ${jsPsych.timelineVariable('catch_n') == 5 ? "grey" : jsPsych.timelineVariable('card5')()}"></div>
             </div>
-            <div class="fixation">+</div>`;
+            <div class="fixation">+</div>
+            ${jsPsych.timelineVariable('catch') ? "": '<div class="eegtrigger"></div>'}`;
             return html;
           },
-          choices: "NO_KEYS",
-          trial_duration: 3000
+          choices: "ALL_KEYS",
+          response_ends_trial: false,
+          trial_duration: 3000,
+          on_load: () => {
+            setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
+          },
+          data: {
+            task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
+            eeg_event_id: () => jsPsych.timelineVariable("catch") ? null : eeg_event_counter++,
+            card: 5,
+            color: () => jsPsych.timelineVariable('card5')(),
+            sequence_id: jsPsych.timelineVariable('id'),
+            outcome: jsPsych.timelineVariable('result'),
+            participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
+            card_value: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+              if (jsPsych.timelineVariable('card5')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
+                return 1;
+              } else {
+                return 0;
+              }
+            },
+            wins_so_far: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+              return jsPsych.data.get().filter({ task: 'reveal' }).last(4).select('card_value').sum()
+            }
+          }
         }
       ]
-    
-/* catch trial events */
-  var catch_trial = [
-    {// catch trial @ the 1st position
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function () {
-        var html =
-          `<div class ="card_deck">
-              <div class ="catch_card deg-0"></div>
-              <div class ="card deg-72" style="background: grey"></div>
-              <div class ="card deg-144" style="background: grey"></div>
-              <div class ="card deg-216" style="background: grey"></div>
-              <div class ="card deg-288" style="background: grey"></div>
-            </div>
-            <div class="fixation">+</div>`;
-        return html;
-      },
-    },
-    {// catch trial @ the 2nd position
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function () {
-        var html =
-          `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="catch_card deg-72"></div>
-              <div class ="card deg-144" style="background: grey"></div>
-              <div class ="card deg-216" style="background: grey"></div>
-              <div class ="card deg-288" style="background: grey"></div>
-            </div>
-            <div class="fixation">+</div>`;
-        return html;
 
-      },
-    },
-    {// catch trial @ the 3rd position
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function () {
-        var html =
-          `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="catch_card deg-144"></div>
-              <div class ="card deg-216" style="background: grey"></div>
-              <div class ="card deg-288" style="background: grey"></div>
-            </div>
-            <div class="fixation">+</div>`;
-        return html;
-      },
-    },
-    {// catch trial @ the 4th position
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function () {
-        var html =
-          `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
-              <div class ="catch_card deg-216"></div>
-              <div class ="card deg-288" style="background: grey"></div>
-            </div>
-            <div class="fixation">+</div>`;
-        return html;
-      },
-    },
-    {// catch trial @ the 5th position
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function () {
-        var html =
-          `<div class ="card_deck">
-              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
-              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
-              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
-              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')()}"></div>
-              <div class ="catch_card deg-288"></div>
-            </div>
-            <div class="fixation">+</div>`;
-        return html;
-      },
-    },
-  ]
 
-  var card_catch = []; // array that contains all the card reveal sequences w/ catch trials at 5 different positions
+      // Welcome + practice trials ====================================================================================================
 
-  for (i = 0; i < 5; i++) {
-    var catch_seq = reveal_seq.slice(0);
-    catch_seq.splice((i + 1), 0, catch_trial[i])
-    var card_catch_n =
-    {
-        timeline: catch_seq
-    }
-    card_catch.push(card_catch_n);
-  }
-     
-    // Welcome + practice trials ====================================================================================================
-    
-    /* welcome instructions */
-    var welcome_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
+      var subject_id_entry = {
+        type: jsPsychSurveyNumber,
+        questions: [
+          { prompt: "Please enter the participant's ID", name: "subject_id", required: true }
+        ],
+        on_finish: function (data) {
+          let sid = parseInt(data.response.subject_id);
+          subject_id = sid >= 10 ? sid.toString() : "0" + sid; // sets the global variable
+          jsPsych.data.addProperties({ subject_id: subject_id });
+        },
+        simulation_options: {
+          simulate: false
+        }
+      }
+
+      /* welcome instructions */
+      var welcome_instructions =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+          `
         <p>Welcome and thank you for participating in this study!</p>
         <br>
         <p>In each trial, you will predict whether there will be more
@@ -533,15 +375,18 @@
         <br>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 100
-    };
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
+      };
 
-    /* practice guided round instructions */
-    var practice_guided_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
+      /* practice guided round instructions */
+      var practice_guided_instructions =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+          `
         <p>We will now go through <strong>2</strong> practice rounds.</p>
         <p>On the next slide, you will see the words
           “<span class="RED">RED</span>” and
@@ -553,15 +398,18 @@
         <p>Please try to stay focused on the fixation cross in the center and reduce blinking during trials.</p>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 100
-    };
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
+      };
 
-    /* practice guided round post-choice instruction */
-    var practice_guided_post_choice_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-      `
+      /* practice guided round post-choice instruction */
+      var practice_guided_post_choice_instructions =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+          `
         <p>Great!</p>
         <p>On the following slide, you will see a deck of 5 cards.</p>
         <p>The color of each card will be automatically revealed one by one.</p>
@@ -571,230 +419,243 @@
         <br>
         <p>Press any key to move on to the next slide.</p>
       `,
-      post_trial_gap: 100
-    };
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
+        }
+      };
 
-    /* practice guided round card reveal */
-    var practice_guided_card_reveal =
-    {
-      timeline: reveal_seq,
-      timeline_variables :[{card1: ()=>"red", card2: ()=>"red", card3: ()=>"red", card4: ()=>"black", card5: ()=>"black"}],
-    };
-
-    /* practice guided round end instructions */
-    var practice_guided_end_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
+      /* practice guided round card reveal */
+      var practice_guided_card_reveal =
       {
-        var practiceResponse0 = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
-        var retHtml;
+        timeline: reveal_seq,
+        timeline_variables: [{ card1: () => "red", card2: () => "red", card3: () => "black", card4: () => "red", card5: () => "black" }],
+      };
 
-        if (practiceResponse0 == 'red')
-        {
-          retHtml =
-          `
+      /* practice guided round end instructions */
+      var practice_guided_end_instructions =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var practiceResponse0 = jsPsych.data.get().filter({ task: 'choice_response' }).last(1).select('color').values[0];
+          var retHtml;
+
+          if (practiceResponse0 == 'red') {
+            retHtml =
+              `
           <p>Well done!</p>
           <br>
           <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
           <br>
           <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
           `;
-        }
-        else
-        {
-          retHtml =
-          `
+          }
+          else {
+            retHtml =
+              `
           <p>Whoops, better luck next time!</p>
           <br>
           <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
           <br>
           <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
           `;
+          }
+          return retHtml;
+        },
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
         }
-        return retHtml;
-      },
-      post_trial_gap: 100
-    };
+      };
 
-            /* 2nd practice trial card reveal */
-            var practice_2_card_reveal =
-    {
-      timeline: reveal_seq,
-      timeline_variables :[{card1: ()=>"black", card2: ()=>"black", card3: ()=>"red", card4: ()=>"red", card5: ()=>"black"}],
-    };
+      /* 2nd practice trial card reveal */
+      var practice_2_card_reveal =
+      {
+        timeline: reveal_seq,
+        timeline_variables: [{ card1: () => "black", card2: () => "black", card3: () => "red", card4: () => "red", card5: () => "black" }],
+      };
 
       /* practice trial 2 end instructions */
       var practice_2_end_instructions =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function()
       {
-        var practiceResponse0 = jsPsych.data.get().filter({task: 'response'}).last(1).select('color').values[0];
-        var retHtml;
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var practiceResponse0 = jsPsych.data.get().filter({ task: 'choice_response' }).last(1).select('color').values[0];
+          var retHtml;
 
-        if (practiceResponse0 == 'black')
-        {
-          retHtml =
-          `
+          if (practiceResponse0 == 'black') {
+            retHtml =
+              `
           <p>Well done!</p>
-          <br>
-          <p>You will now begin with the real trials.</p>
+          
           `;
-        }
-        else
-        {
-          retHtml =
-          `
+          }
+          else {
+            retHtml =
+              `
           <p>Whoops, better luck next time!</p>
-          <br>
-          <p>You will now begin with the real trials.</p>
+          
           `;
+          }
+          retHtml += `<p>If you have any questions about the task, ask the experimenter now.</p>
+          <p>Once the experimenter gives you the OK, press any key to begin the real trials.</p>`
+          return retHtml;
+        },
+        post_trial_gap: 100,
+        simulation_options: {
+          simulate: false
         }
-        return retHtml;
-      },
-      post_trial_gap: 100
-    };
+      };
 
-    /* 2 practice trials */
-    var practice_procedure =
-    {
-      timeline:
-      [
-        practice_guided_instructions,
-        choice,
-        show_choice,
-        practice_guided_post_choice_instructions,
-        practice_guided_card_reveal,
-        practice_guided_end_instructions,
-      ]
-    }
-
-    var practice_procedure_2 = 
-    {
-      timeline:
-      [
-        choice,
-        show_choice,
-        practice_2_card_reveal,
-        practice_2_end_instructions,
-      ]
-    }
-
-    //  test trials blocks ==========================================================================================================
-    
-    /* card reveal sequence */
-    var card_reveal =
-    {
-      timeline: reveal_seq
-    };
-
-    /* result page */
-    var result_page = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function(){
-        trial_number++;
-        if (jsPsych.timelineVariable('result') == 0){
-          money += 0.2;
-          return `
-          <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
-            <div class="trial" style="text-align: center;">
-              <p>Won 20 cents!</p></div>
-          </div>`
+      /* 2 practice trials */
+      var practice_procedure =
+      {
+        timeline:
+          [
+            practice_guided_instructions,
+            choice,
+            show_choice,
+            practice_guided_post_choice_instructions,
+            practice_guided_card_reveal,
+            practice_guided_end_instructions,
+          ],
+        data: {
+          phase: 'practice-1'
         }
-        if (jsPsych.timelineVariable('result') == 1){
-          return `
-          <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
-            <div class="trial" style="text-align: center;">
-              <p>Lost this Round.</p></div>
-          </div>`
-        };
-      },
-      choices: "NO_KEYS",
-      trial_duration: 2000,
-    }
+      }
 
-    // Block timeline ========================================================================================================
+      var practice_procedure_2 =
+      {
+        timeline:
+          [
+            choice,
+            show_choice,
+            practice_2_card_reveal,
+            practice_2_end_instructions,
+          ],
+        data: {
+          phase: 'practice-2'
+        }
+      }
 
-    var block_start = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function(){
-        var real_block_number = callBlock() + 1;
-        var html = `
-        <p>Block: <strong>${real_block_number}</strong></p>
+      //  test trials blocks ==========================================================================================================
+
+      /* card reveal sequence */
+      var card_reveal =
+      {
+        timeline: reveal_seq
+      };
+
+      /* result page */
+      /** can not update money and trial_number **/
+      var result_page = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          trial_number++;
+          if (jsPsych.timelineVariable('result') == 0) {
+            money += 0.2;
+            return `<p>You won 20 cents!</p>`
+          }
+          if (jsPsych.timelineVariable('result') == 1) {
+            return `<p>You didn't win this round.</p>`
+          }
+          if (jsPsych.timelineVariable('result') == null) {
+            return `<p>That was an attention check trial.</p>`
+          }
+        },
+        choices: "NO_KEYS",
+        trial_duration: 2000,
+
+      }
+
+      var block_start = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var real_block_number = block_number + 1;
+          var html = `
+        <p>Block ${real_block_number} of 5 is about to start.</p>
         `;
-        return html;
-      },
-      choices: "NO_KEYS",
-      trial_duration: 2000
-    }
-
-    var block_end = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function(){
-        var round_money = roundTo(callMoney(), 2);
-        var real_block_number = callBlock() + 1;
-        var html = `
-        <p>Block <strong>${real_block_number}</strong> ended</p>
-        <br>
-        <p>You won <strong>${round_money}.</p>        `
-        return html;
-      },
-
-      on_finish: function(){
-        block_number ++; 
-      },
-
-      simulation_options: {
-        simulate: false
+          return html;
+        },
+        choices: "NO_KEYS",
+        trial_duration: 2000,
+        simulation_options: {
+          simulate: false
+        }
       }
 
-    }
+      var block_end = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () {
+          var round_money = roundTo(money, 2);
+          var real_block_number = block_number + 1;
+          var html = `
+        <p>Block ${real_block_number} of 5 complete!</p>
+        <p>Including the $10 you started with, you've won a total of $<strong>${round_money.toFixed(2)}</strong>.</p>
+        <p>Press any key to continue to the next block.</p>        `
+          return html;
+        },
 
-    var block_timeline = {
-      timeline: []
-    }
+        on_finish: function () {
+          block_number++;
+        },
 
-    /* test run timeline */
-    for(let i = 0; i < 5; i++){
-      var test_proc = {
-        timeline: [
-          trial_title,
-          choice,
-          show_choice,
-          card_reveal,
-          result_page,
-        ],
-        timeline_variables: final_outcome[i],
+        simulation_options: {
+          simulate: false
+        }
+
       }
-      block_timeline.timeline.push(block_start);
-      block_timeline.timeline.push(test_proc);
-      block_timeline.timeline.push(block_end);
-    }
-    
-    // [TUT CODE] to show at end of trials. gives info on how participant did.
-    var debrief_block =
-    {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: function() {
-        var trials = jsPsych.data.get().filter({task: 'response'}); // getting # of response trials
-        var correct_trials = trials.filter({correct: true}); // filtering for correct for # correct answers
-        var accuracy = Math.round(correct_trials.count() / trials.count() * 100); // proportion
-        var rt = Math.round(correct_trials.select('rt').mean()); // mean reaction time
 
-        return `<p>You responded correctly on ${accuracy}% of the trials.</p>
-      <p>Your average response time was ${rt}ms.</p>
-      <p>Press any key to complete the experiment. Thank you!</p>`;
+      var block_timeline = {
+        timeline: [],
+        data: {
+          phase: 'test'
+        }
       }
-    };
 
-    // Timeline push and run --------------------------------------------------------------------------------------------------------
-    TIMELINE.push(welcome_instructions);
-    TIMELINE.push(practice_procedure);
-    TIMELINE.push(practice_procedure_2)
-    TIMELINE.push(block_timeline);
+      
 
-    //timeline.push(debrief_block);
-    jsPsych.run(TIMELINE); // run it all!
+      /* test run timeline */
+      for (let i = 0; i < 5; i++) {
+        var test_proc = {
+          timeline: [
+            choice,
+            show_choice,
+            card_reveal,
+            result_page,
+          ],
+          timeline_variables: final_outcome[i],
+        }
+        block_timeline.timeline.push(block_start);
+        block_timeline.timeline.push(test_proc);
+        block_timeline.timeline.push(block_end);
+      }
+
+      // Debrief =====================================================================================================================
+      var debrief_block =
+      {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
+        <p>Thank you for participating!</p>
+        <p>You are done. Please wait for the experimenter to come assist you.</p>`,
+        choices: "NO_KEYS",
+        on_start: function () {
+          jsPsych.data.get().localSave('json', `219_2023_behavioral_${subject_id}.json`);
+        },
+        simulation_options: {
+          simulate: false
+        }
+      };
+
+      // Timeline push and run --------------------------------------------------------------------------------------------------------
+      TIMELINE.push(subject_id_entry);
+      TIMELINE.push(welcome_instructions);
+      TIMELINE.push(practice_procedure);
+      TIMELINE.push(practice_procedure_2)
+      TIMELINE.push(block_timeline);
+      TIMELINE.push(debrief_block);
+
+      //timeline.push(debrief_block);
+      jsPsych.run(TIMELINE); // run it all!
   </script>
 </html>
