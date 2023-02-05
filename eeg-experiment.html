@@ -103,53 +103,54 @@
      * 0 represent win result.
      * 1 represent lose result.
     */
-    var win_card_comb =
-    [ 
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 1},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 2},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 3},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 4},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 5},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 6},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 7},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 8},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 9},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 10},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 0, id: 11},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 12},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 13},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 0, id: 14},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 0, id: 15},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 0, id: 16},
+    const win_card_comb =
+    [
+      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 1, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 2, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 3, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 0, id: 4, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 0, id: 5, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 0, id: 6, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[0], result: 0, id: 7, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 0, id: 8, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 0, id: 9, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 0, id: 10, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 0, id: 11, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 0, id: 12, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 0, id: 13, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 0, id: 14, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 0, id: 15, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 0, id: 16, catch: false, catch_n: 0 },
     ]
 
-    var lose_card_comb =
-    [ 
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 17},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 18},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 19},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 20},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 21},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 22},
-      {card1: ()=>color[0], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 23},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 24},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 25},
-      {card1: ()=>color[0], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 26},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[1], result: 1, id: 27},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 28},
-      {card1: ()=>color[1], card2: ()=>color[0], card3: ()=>color[1], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 29},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[0], card5: ()=>color[1], result: 1, id: 30},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[0], card4: ()=>color[1], card5: ()=>color[0], result: 1, id: 31},
-      {card1: ()=>color[1], card2: ()=>color[1], card3: ()=>color[1], card4: ()=>color[0], card5: ()=>color[0], result: 1, id: 32},
+    const lose_card_comb =
+    [
+      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 17, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 18, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 19, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 1, id: 20, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 1, id: 21, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 1, id: 22, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[1], result: 1, id: 23, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 1, id: 24, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 1, id: 25, catch: false, catch_n: 0 },
+      { card1: () => color[0], card2: () => color[1], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 1, id: 26, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[0], card4: () => color[1], card5: () => color[1], result: 1, id: 27, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[0], card5: () => color[1], result: 1, id: 28, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[0], card3: () => color[1], card4: () => color[1], card5: () => color[0], result: 1, id: 29, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[0], card5: () => color[1], result: 1, id: 30, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[0], card4: () => color[1], card5: () => color[0], result: 1, id: 31, catch: false, catch_n: 0 },
+      { card1: () => color[1], card2: () => color[1], card3: () => color[1], card4: () => color[0], card5: () => color[0], result: 1, id: 32, catch: false, catch_n: 0 },
     ]
 
     var all80trials = shuffleOutcome(); // array of arrays of all the card results 
-    var final_outcome = [];
-    final_outcome[0] = all80trials.slice(0,16);
-    final_outcome[1] = all80trials.slice(16,32);
-    final_outcome[2] = all80trials.slice(32,48);
-    final_outcome[3] = all80trials.slice(48,64);
-    final_outcome[4] = all80trials.slice(64,80);
+    var pre_catch_outcome = [];
+    pre_catch_outcome[0] = all80trials.slice(0, 16);
+    pre_catch_outcome[1] = all80trials.slice(16, 32);
+    pre_catch_outcome[2] = all80trials.slice(32, 48);
+    pre_catch_outcome[3] = all80trials.slice(48, 64);
+    pre_catch_outcome[4] = all80trials.slice(64, 80);
+    var final_outcome = insert_catch_trial(pre_catch_outcome);
 
 
     // functions ====================================================================================================================
@@ -170,12 +171,14 @@
      * 16 card combs will appear twice in each of the 40 win or lose trials,
      * the first 8 card combs will appear one more time (not sure if we want to randomize this part)
      **/
-    function makeItForty(comb){  // helper function: duplicate the array and append the first half of the array to the resulting array
-      var comb_copy = comb.concat(comb);
-      var half_copy = [comb[4], comb[12], comb[7], comb[2], comb[13], comb[9], comb[1], comb[15]];
-      var forty_array = comb_copy.concat(half_copy);
+    function makeItForty(comb) {  // helper function: duplicate the array and append the first half of the array to the resulting array
+      const comb_clone = comb.map(object => ({ ...object })) // not sure how this one works, but before I was encountering problems when try to assign catch trials to card combination. Since the copy I made before only copy the reference and not the actual objects, it will assign catch trials to all the copies in the final outcome
+      var comb_copy = comb.concat(comb_clone);
+      var half_clone = [comb[4], comb[12], comb[7], comb[2], comb[13], comb[9], comb[1], comb[15]];
+      const half = half_clone.map(object => ({ ...object })) // as as before
+      var forty_array = comb_copy.concat(half);
 
-      return forty_array
+    return forty_array
     }
 
     function shuffleOutcome(){ // create and shuffle card outcomes
@@ -190,6 +193,14 @@
       return shuffled_outcome;
     }
 
+    function insert_catch_trial(arrarr) { // assign catch trials to each block
+      for (let i = 0; i < 5; i++) {
+        let n = Math.floor(Math.random() * 16) // randomly assign a catch trial in n of the 16 trials in a block
+        arrarr[i][n].catch = true;
+        arrarr[i][n].catch_n = (Math.floor(Math.random() * 5) + 1) // randomly assign the placement of the catch trial in a card reveal sequence; 1-5
+      }
+    return arrarr;
+    }
     
     
     /* Dynamic parameters helper function */
@@ -406,6 +417,98 @@
           trial_duration: 3000
         }
       ]
+    
+/* catch trial events */
+  var catch_trial = [
+    {// catch trial @ the 1st position
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function () {
+        var html =
+          `<div class ="card_deck">
+              <div class ="catch_card deg-0"></div>
+              <div class ="card deg-72" style="background: grey"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+        return html;
+      },
+    },
+    {// catch trial @ the 2nd position
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function () {
+        var html =
+          `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="catch_card deg-72"></div>
+              <div class ="card deg-144" style="background: grey"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+        return html;
+
+      },
+    },
+    {// catch trial @ the 3rd position
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function () {
+        var html =
+          `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="catch_card deg-144"></div>
+              <div class ="card deg-216" style="background: grey"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+        return html;
+      },
+    },
+    {// catch trial @ the 4th position
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function () {
+        var html =
+          `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
+              <div class ="catch_card deg-216"></div>
+              <div class ="card deg-288" style="background: grey"></div>
+            </div>
+            <div class="fixation">+</div>`;
+        return html;
+      },
+    },
+    {// catch trial @ the 5th position
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function () {
+        var html =
+          `<div class ="card_deck">
+              <div class ="card deg-0" style="background: ${jsPsych.timelineVariable('card1')()}"></div>
+              <div class ="card deg-72" style="background: ${jsPsych.timelineVariable('card2')()}"></div>
+              <div class ="card deg-144" style="background: ${jsPsych.timelineVariable('card3')()}"></div>
+              <div class ="card deg-216" style="background: ${jsPsych.timelineVariable('card4')()}"></div>
+              <div class ="catch_card deg-288"></div>
+            </div>
+            <div class="fixation">+</div>`;
+        return html;
+      },
+    },
+  ]
+
+  var card_catch = []; // array that contains all the card reveal sequences w/ catch trials at 5 different positions
+
+  for (i = 0; i < 5; i++) {
+    var catch_seq = reveal_seq.slice(0);
+    catch_seq.splice((i + 1), 0, catch_trial[i])
+    var card_catch_n =
+    {
+        timeline: catch_seq
+    }
+    card_catch.push(card_catch_n);
+  }
      
     // Welcome + practice trials ====================================================================================================
     
@@ -587,7 +690,6 @@
     };
 
     /* result page */
-    /** can not update money and trial_number **/
     var result_page = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function(){
@@ -598,7 +700,6 @@
           <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
             <div class="trial" style="text-align: center;">
               <p>Won 20 cents!</p></div>
-              <p>Your total winnings were $${money}. </p> 
           </div>`
         }
         if (jsPsych.timelineVariable('result') == 1){
@@ -606,13 +707,14 @@
           <div class="info_container" style="position: relative; margin: auto; display: flex; justify-content: space-between;">
             <div class="trial" style="text-align: center;">
               <p>Lost this Round.</p></div>
-              <p>Your total winnings were $${money}. </p>
           </div>`
         };
       },
       choices: "NO_KEYS",
       trial_duration: 2000,
     }
+
+    // Block timeline ========================================================================================================
 
     var block_start = {
       type: jsPsychHtmlKeyboardResponse,
@@ -669,8 +771,6 @@
       block_timeline.timeline.push(test_proc);
       block_timeline.timeline.push(block_end);
     }
-
-    // Block timeline ========================================================================================================
     
     // [TUT CODE] to show at end of trials. gives info on how participant did.
     var debrief_block =
