@@ -560,7 +560,14 @@
             return `<p>You didn't win this round.</p>`
           }
           if (jsPsych.timelineVariable('result') == null) {
-            return `<p>That was an attention check trial.</p>`
+            var which_card = jsPsych.timelineVariable("catch_n");
+            var attention_check_correct = jsPsych.data.get().filter({ task: 'catch', card: which_card }).last(1).select('rt').values[0] <= 1500;
+
+            if(attention_check_correct) {
+              return `<p>Good job! You responded quickly to the attention check.</p>`;
+            } else {
+              return `<p>Oops! You didn't respond quickly to the attention check.</p>`;
+            }
           }
         },
         choices: "NO_KEYS",
@@ -648,10 +655,10 @@
       };
 
       // Timeline push and run --------------------------------------------------------------------------------------------------------
-      TIMELINE.push(subject_id_entry);
-      TIMELINE.push(welcome_instructions);
-      TIMELINE.push(practice_procedure);
-      TIMELINE.push(practice_procedure_2)
+      // TIMELINE.push(subject_id_entry);
+      // TIMELINE.push(welcome_instructions);
+      // TIMELINE.push(practice_procedure);
+      // TIMELINE.push(practice_procedure_2)
       TIMELINE.push(block_timeline);
       TIMELINE.push(debrief_block);
 
