@@ -1,0 +1,115 @@
+html,
+body {
+  background-color: #444;
+  color: white;
+}
+p {
+  color: white;
+  font-size: 20px;
+}
+.RED {
+  color: red;
+  font-weight: bold;
+}
+.BLACK {
+  color: black;
+  font-weight: bold;
+}
+.fixation {
+  color: white;
+  font-size: 60px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.choice_container div {
+  width: 200px;
+  height: 60px;
+  font-size: 60px;
+  line-height: 1em;
+}
+.show_choice_container {
+  position: absolute;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  margin-top: -75px;
+  margin-left: -200px;
+  justify-content: center;
+  width: 400px;
+  height: 150px;
+}
+.card_deck {
+  margin: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  border-radius: 100%;
+}
+.card {
+  position: absolute;
+  top: 50%;
+  width: 80px;
+  height: 100px;
+  background: #888;
+  border-radius: 10px;
+  border: 7px solid white;
+}
+.deg-0 {
+  transform: translateY(-200px);
+}
+.deg-72 {
+  transform: rotate(72deg) translateY(-150px) rotate(-72deg) translateY(-50px);
+}
+.deg-144 {
+  transform: rotate(144deg) translateY(-150px) rotate(-144deg) translateY(-50px);
+}
+.deg-216 {
+  transform: rotate(216deg) translateY(-150px) rotate(-216deg) translateY(-50px);
+}
+.deg-288 {
+  transform: rotate(288deg) translateY(-150px) rotate(-288deg) translateY(-50px);
+}
+.catch_card {
+  position: absolute;
+  top: 50%;
+  width: 80px;
+  height: 100px;
+  background: linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 45%,
+      white 45%,
+      white 55%,
+      rgba(0, 0, 0, 0) 55%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      135deg,
+      grey 0%,
+      grey 45%,
+      white 45%,
+      white 55%,
+      grey 55%,
+      grey 100%
+    );
+  border-radius: 10px;
+  border: 7px solid #5a5a5a;
+}
+.eegtrigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  color: white;
+}
