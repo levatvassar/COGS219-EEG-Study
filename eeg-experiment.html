@@ -148,6 +148,7 @@
           response_ends_trial: false,
           trial_duration: 3000,
           on_load: () => {
+            if(jsPsych.timelineVariable('catch')) return;
             setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
@@ -187,6 +188,7 @@
           response_ends_trial: false,
           trial_duration: 3000,
           on_load: () => {
+            if(jsPsych.timelineVariable('catch')) return;
             setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
@@ -228,6 +230,7 @@
           response_ends_trial: false,
           trial_duration: 3000,
           on_load: () => {
+            if(jsPsych.timelineVariable('catch')) return;
             setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
@@ -269,6 +272,7 @@
           response_ends_trial: false,
           trial_duration: 3000,
           on_load: () => {
+            if(jsPsych.timelineVariable('catch')) return;
             setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
@@ -310,6 +314,7 @@
           response_ends_trial: false,
           trial_duration: 3000,
           on_load: () => {
+            if(jsPsych.timelineVariable('catch')) return;
             setTimeout(() => document.querySelector('.eegtrigger').style.display = "none", 250)
           },
           data: {
