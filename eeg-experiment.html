@@ -158,8 +158,11 @@
             color: () => jsPsych.timelineVariable('card1')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
+            catch_n: jsPsych.timelineVariable('catch_n'),
             participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
             card_value: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               if (jsPsych.timelineVariable('card1')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
@@ -198,8 +201,11 @@
             color: () => jsPsych.timelineVariable('card2')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
+            catch_n: jsPsych.timelineVariable('catch_n'),
             participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
             card_value: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               if (jsPsych.timelineVariable('card2')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
@@ -207,6 +213,8 @@
               }
             },
             wins_so_far: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               return jsPsych.data.get().filter({ task: 'reveal' }).last(1).select('card_value').sum()
             }
           }
@@ -240,8 +248,11 @@
             color: () => jsPsych.timelineVariable('card3')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
+            catch_n: jsPsych.timelineVariable('catch_n'),
             participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
             card_value: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               if (jsPsych.timelineVariable('card3')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
@@ -249,6 +260,8 @@
               }
             },
             wins_so_far: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               return jsPsych.data.get().filter({ task: 'reveal' }).last(2).select('card_value').sum()
             }
           }
@@ -282,8 +295,11 @@
             color: () => jsPsych.timelineVariable('card4')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
+            catch_n: jsPsych.timelineVariable('catch_n'),
             participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
             card_value: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               if (jsPsych.timelineVariable('card4')() == jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color) {
                 return 1;
               } else {
@@ -291,6 +307,8 @@
               }
             },
             wins_so_far: () => {
+              if(jsPsych.timelineVariable('catch')) { return null; }
+
               return jsPsych.data.get().filter({ task: 'reveal' }).last(3).select('card_value').sum()
             }
           }
@@ -324,6 +342,7 @@
             color: () => jsPsych.timelineVariable('card5')(),
             sequence_id: jsPsych.timelineVariable('id'),
             outcome: jsPsych.timelineVariable('result'),
+            catch_n: jsPsych.timelineVariable('catch_n'),
             participant_choice: () => jsPsych.data.get().filter({ task: 'choice_response' }).last(1).values()[0].color,
             card_value: () => {
               if(jsPsych.timelineVariable('catch')) { return null; }
