@@ -193,7 +193,7 @@
           },
           data: {
             task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
-            eeg_event_id: () => eeg_event_counter++,
+            eeg_event_id: () => jsPsych.timelineVariable("catch") ? null : eeg_event_counter++,
             card: 2,
             color: () => jsPsych.timelineVariable('card2')(),
             sequence_id: jsPsych.timelineVariable('id'),
@@ -235,7 +235,7 @@
           },
           data: {
             task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
-            eeg_event_id: () => eeg_event_counter++,
+            eeg_event_id: () => jsPsych.timelineVariable("catch") ? null : eeg_event_counter++,
             card: 3,
             color: () => jsPsych.timelineVariable('card3')(),
             sequence_id: jsPsych.timelineVariable('id'),
@@ -277,7 +277,7 @@
           },
           data: {
             task: ()=> jsPsych.timelineVariable("catch") ? 'catch' : 'reveal',
-            eeg_event_id: () => eeg_event_counter++,
+            eeg_event_id: () => jsPsych.timelineVariable("catch") ? null : eeg_event_counter++,
             card: 4,
             color: () => jsPsych.timelineVariable('card4')(),
             sequence_id: jsPsych.timelineVariable('id'),
@@ -359,49 +359,33 @@
         }
       }
 
+      var waiting_to_start = {
+        type: jsPsychHtmlKeyboardResponse,
+        choices: ['b'],
+        stimulus: `
+        <p>Thank you for participating in this study.</p>
+        <p>Experimenter: please make sure the experiment is fullscreen (press F11).</p>
+        <p>Press B to begin.</p>
+      `,
+        simulation_options: {
+          simulate: false
+        }
+      }
+
       /* welcome instructions */
       var welcome_instructions =
       {
         type: jsPsychHtmlKeyboardResponse,
         stimulus:
           `
-        <p>Welcome and thank you for participating in this study!</p>
-        <br>
-        <p>In each trial, you will predict whether there will be more
-            <span class="RED">RED</span> or
-            <span class="BLACK">BLACK</span> cards.</p>
-        <p>Afterwards, on the next slide, a deck of 5 cards will appear.</p>
-        <br>
-        <p>Each card has a 50% chance of appearing as either color.</p>
-        <p>If you correctly predicted the color of most of the cards, you win the round.</p>
-        <p>Otherwise, you lose the round.</p>
-        <br>
-        <p>The next few slides will serve as a tutorial.</p>
-        <br>
-        <p>Press any key to move on to the next slide.</p>
-      `,
-        post_trial_gap: 100,
-        simulation_options: {
-          simulate: false
-        }
-      };
-
-      /* practice guided round instructions */
-      var practice_guided_instructions =
-      {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus:
-          `
-        <p>We will now go through <strong>2</strong> practice rounds.</p>
+        <p>Each trial will begin with your prediction. Do you think the five cards will contain more red cards or more black cards?</p>
         <p>On the next slide, you will see the words
           “<span class="RED">RED</span>” and
           “<span class="BLACK">BLACK</span>”.</p>
         <p>Click ← on your keyboard to choose
           “<span class="RED">RED</span>” or → to choose
           “<span class="BLACK">BLACK</span>”.</p>
-        <br>
-        <p>Please try to stay focused on the fixation cross in the center and reduce blinking during trials.</p>
-        <p>Press any key to move on to the next slide.</p>
+        <p>Press any key to continue.</p>
       `,
         post_trial_gap: 100,
         simulation_options: {
@@ -415,14 +399,10 @@
         type: jsPsychHtmlKeyboardResponse,
         stimulus:
           `
-        <p>Great!</p>
-        <p>On the following slide, you will see a deck of 5 cards.</p>
-        <p>The color of each card will be automatically revealed one by one.</p>
-        <br>
-        <p>If more cards in the deck are in your chosen color than the other color, you win this round.</p>
-        <p>Otherwise, you lose this round.</p>
-        <br>
-        <p>Press any key to move on to the next slide.</p>
+        <p>You've made your prediction. Next, the five cards will be revealed, one at a time.</p>
+        <p>If more cards in the deck are in your chosen color than the other color, you win 20 cents.</p>
+        <p>If not, you gain no money.</p>
+        <p>Press any key to see the cards revealed.</p>
       `,
         post_trial_gap: 100,
         simulation_options: {
@@ -432,10 +412,10 @@
 
       /* practice guided round card reveal */
       var practice_guided_card_reveal =
-      {
-        timeline: reveal_seq,
-        timeline_variables: [{ card1: () => "red", card2: () => "red", card3: () => "black", card4: () => "red", card5: () => "black" }],
-      };
+        {
+          timeline: reveal_seq,
+          timeline_variables: [{ card1: () => "red", card2: () => "red", card3: () => "black", card4: () => "red", card5: () => "black", catch: false, catch_n: 0, result: null, id: 34 }],
+        };
 
       /* practice guided round end instructions */
       var practice_guided_end_instructions =
@@ -448,23 +428,20 @@
           if (practiceResponse0 == 'red') {
             retHtml =
               `
-          <p>Well done!</p>
-          <br>
-          <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
-          <br>
-          <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
+          <p>You predicted correctly!</p>
+          
           `;
           }
           else {
             retHtml =
               `
-          <p>Whoops, better luck next time!</p>
-          <br>
-          <p>The next practice trial will be identical to the previous, but you will not be given any instructions.</p>
-          <br>
-          <p>Please stay focused on the fixation point “<strong>+</strong>” at the center and blink as little as possible.</p>
+          <p>You predicted incorrectly this time.</p>
           `;
           }
+          retHtml += `<p>Let's do one more practice round, this time without any instructions.</p>
+          <p>Remember, it's important for the experiment that you keep your gaze fixed on the <strong>+</strong> in the center and blink as little as possible.</p>
+          <p>Moving your eyes or blinking will add electrical noise to the data.</p>
+          <p>Press any key to start the practice trial.</p>`
           return retHtml;
         },
         post_trial_gap: 100,
@@ -477,7 +454,7 @@
       var practice_2_card_reveal =
       {
         timeline: reveal_seq,
-        timeline_variables: [{ card1: () => "black", card2: () => "black", card3: () => "red", card4: () => "red", card5: () => "black" }],
+        timeline_variables: [{ card1: () => "black", card2: () => "black", card3: () => "red", card4: () => "red", card5: () => "black", catch: false, catch_n: 0, result: null, id: 34  }],
       };
 
       /* practice trial 2 end instructions */
@@ -491,19 +468,21 @@
           if (practiceResponse0 == 'black') {
             retHtml =
               `
-          <p>Well done!</p>
+              <p>You predicted correctly!</p>
           
           `;
           }
           else {
             retHtml =
               `
-          <p>Whoops, better luck next time!</p>
+              <p>You predicted incorrectly this time.</p>
           
           `;
           }
-          retHtml += `<p>If you have any questions about the task, ask the experimenter now.</p>
-          <p>Once the experimenter gives you the OK, press any key to begin the real trials.</p>`
+          retHtml += `<p>During the experiment, sometimes one of the cards will have a white X instead of being red or black.</p>
+          <p>As soon as you see a white X, press either arrow key as quickly as possible.</p>
+          <p>On trials with a white X, you cannot win any money.</p>
+          <p>We'll show you an example now. Press any key to practice a trial with a white X.</p>`
           return retHtml;
         },
         post_trial_gap: 100,
@@ -516,7 +495,6 @@
       var catch_practice_card_reveal =
       {
         timeline: reveal_seq,
-        // timeline_variables: [{ card1: () => "black", card2: () => "black", card3: () => "red", card4: () => "red", card5: () => "black" }],
         timeline_variables: [createCatch(2)],
       };
 
@@ -524,42 +502,23 @@
       var catch_practice_end_instructions =
       {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: function () {
-          var practiceResponse0 = jsPsych.data.get().filter({ task: 'choice_response' }).last(1).select('color').values[0];
-          var retHtml;
-
-          if (practiceResponse0 == 'black') {
-            retHtml =
-              `
-          <p>Well done!</p>
-
-          `;
-          }
-          else {
-            retHtml =
-              `
-          <p>Whoops, better luck next time!</p>
-
-          `;
-          }
-          retHtml += `<p>If you have any questions about the task, ask the experimenter now.</p>
-          <p>Once the experimenter gives you the OK, press any key to begin the real trials.</p>`
-          return retHtml;
-        },
+        stimulus: `
+          <p>You are ready to begin the experiment.</p>
+          <p>Please keep your gaze fixed on the <strong>+</strong> in the center and blink as little as possible.</p>
+          <p>You may move your eyes and blink whenever the + is not on the screen.</p>
+          <p>If you have any questions, please ask the experimenter now.</p>
+          <p>Once the experimenter gives you the OK, press any key to begin the real trials.</p>`,
         post_trial_gap: 100,
         simulation_options: {
           simulate: false
         }
       };
 
-
-
       /* 2 practice trials */
       var practice_procedure =
       {
         timeline:
           [
-            practice_guided_instructions,
             choice,
             show_choice,
             practice_guided_post_choice_instructions,
@@ -590,7 +549,6 @@
       {
         timeline:
           [
-              catch_practice_instructions,
               catch_practice_card_reveal,
               catch_practice_end_instructions
           ]
@@ -714,15 +672,16 @@
       };
 
       // Timeline push and run --------------------------------------------------------------------------------------------------------
-      // TIMELINE.push(subject_id_entry);
-      // TIMELINE.push(welcome_instructions);
-      // TIMELINE.push(practice_procedure);
-      // TIMELINE.push(practice_procedure_2);
-      // TIMELINE.push(catch_practice);
+      TIMELINE.push(subject_id_entry);
+      TIMELINE.push(waiting_to_start);
+      TIMELINE.push(welcome_instructions);
+      TIMELINE.push(practice_procedure);
+      TIMELINE.push(practice_procedure_2);
+      TIMELINE.push(catch_practice);
       TIMELINE.push(block_timeline);
       TIMELINE.push(debrief_block);
 
       //timeline.push(debrief_block);
-      jsPsych.run(TIMELINE); // run it all!
+      jsPsych.simulate(TIMELINE); // run it all!
   </script>
 </html>

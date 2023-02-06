@@ -441,8 +441,8 @@ function createStimulusSet(jsPsych) {
   catch_trials = jsPsych.randomization.shuffle(catch_trials);
 
   for (var i = 0; i < 5; i++) {
-    pre_catch_outcome[i].unshift(catch_trials[i]);
-    //pre_catch_outcome[i] = jsPsych.randomization.shuffle(pre_catch_outcome[i]);
+    pre_catch_outcome[i].push(catch_trials[i]);
+    pre_catch_outcome[i] = jsPsych.randomization.shuffle(pre_catch_outcome[i]);
   }
 
   return pre_catch_outcome;
