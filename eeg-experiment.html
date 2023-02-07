@@ -501,6 +501,7 @@
           retHtml += `<p>During the experiment, sometimes one of the cards will have a white X instead of being red or black.</p>
           <p>As soon as you see a white X, press either arrow key as quickly as possible.</p>
           <p>On trials with a white X, you cannot win any money.</p>
+          <p>But, <strong>if you respond too slowly to the white X (more than 1.5 seconds), you will lose $1.00.</strong></p>
           <p>We'll show you an example now. Press any key to practice a trial with a white X.</p>`
           return retHtml;
         },
@@ -600,9 +601,10 @@
             var attention_check_correct = rt !== null && rt <= 1500;
 
             if(attention_check_correct) {
-              return `<p>Good job! You responded quickly to the attention check.</p>`;
+              return `<p>Good job! You responded quickly to the white X.</p>`;
             } else {
-              return `<p>Oops! You didn't respond quickly to the attention check.</p>`;
+              money -= 1;
+              return `<p>Oops! You didn't respond quickly to the white X. You lost $1.00.</p>`;
             }
           }
         },
@@ -634,7 +636,7 @@
           var real_block_number = block_number + 1;
           var html = `
         <p>Block ${real_block_number} of 5 complete!</p>
-        <p>Including the $10 you started with, you've won a total of $<strong>${round_money.toFixed(2)}</strong>.</p>
+        <p>Including the $10 you started with, you've won a total of $<strong>${Math.max(round_money, 10).toFixed(2)}</strong>.</p>
         <p>Press any key to continue to the next block.</p>        `
           return html;
         },
